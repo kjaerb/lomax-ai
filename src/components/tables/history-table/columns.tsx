@@ -1,10 +1,18 @@
 "use client";
 
-import { trpc } from "@/providers/trpc-provider";
-import { UserReponse } from "@prisma/client";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/server";
+
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<UserReponse>[] = [
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+
+type UserResponseTable = ArrayElement<
+  Awaited<ReturnType<typeof api.userResponses.getUserRespones.query>>
+>;
+
+export const columns: ColumnDef<UserResponseTable>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -24,22 +32,44 @@ export const columns: ColumnDef<UserReponse>[] = [
   },
   {
     accessorKey: "userId",
-    header: "User ID",
-    cell: async ({ row }) => {
-      const { userId } = row.original;
+    header: "Bruger",
+    cell: ({ row }) => {
+      const { user } = row.original;
+      if (!user) return <span>Ukendt bruger</span>;
 
-      const m = trpc.userResponses.getNumResponses.useQuery(10);
+      if (!user.name) return <span>{user.email}</span>;
 
-      return <span>{userId}</span>;
+      return <span>{user.name}</span>;
     },
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: "Oprettet",
     cell: ({ row }) => {
       const { createdAt } = row.original;
 
       return <span>{createdAt.toDateString()}</span>;
+    },
+  },
+  {
+    accessorKey: "comment",
+    header: "Kommentar",
+    cell: ({ row }) => {
+      const { comment } = row.original;
+
+      const commentObj = JSON.parse(comment);
+
+      return Object.keys(commentObj).map((key, index) => (
+        <div
+          key={index}
+          className={cn(
+            index === 0 && "text-green-500",
+            index === 1 && "text-red-500"
+          )}
+        >
+          <span className="font-bold">{key}:</span> {commentObj[key]}
+        </div>
+      ));
     },
   },
 ];

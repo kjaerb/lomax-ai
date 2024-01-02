@@ -22,12 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={cn(inter.className, "min-h-screen bg-background")}>
-        <AuthProvider>
-          <TRPCReactProvider cookies={cookies().toString()}>
+        <TRPCReactProvider cookies={cookies().toString()}>
+          <AuthProvider>
             <Toaster richColors />
             {children}
-          </TRPCReactProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

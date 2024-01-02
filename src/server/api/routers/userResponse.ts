@@ -1,13 +1,22 @@
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-
 export const userResponseRouter = createTRPCRouter({
-  getNumResponses: protectedProcedure
-    .input(z.number())
-    .query(({ ctx, input }) => {
-      const userResponses = ctx.db.userReponse.findFirst({
-        take: input,
+  getUserRespones: publicProcedure.query(async ({ ctx }) => {
+    const userResponses = await ctx.db.userReponse.findMany({
+      include: { user: true },
+    });
+
+    return userResponses;
+  }),
+  getNumUserRespones: publicProcedure
+    .input(z.object({ amount: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { amount } = input;
+
+      const userResponses = await ctx.db.userReponse.findMany({
+        include: { user: true },
+        take: amount,
       });
 
       return userResponses;
