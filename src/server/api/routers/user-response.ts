@@ -21,4 +21,8 @@ export const userResponseRouter = createTRPCRouter({
 
       return userResponses;
     }),
+  getUserResponsesCount: publicProcedure.query(async ({ ctx }) => {
+    const count = await ctx.db.userReponse.count();
+    return count;
+  }),
 });

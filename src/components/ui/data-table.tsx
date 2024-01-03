@@ -9,6 +9,7 @@ import {
   getSortedRowModel,
   SortingState,
   getFilteredRowModel,
+  getPaginationRowModel,
   VisibilityState,
 } from "@tanstack/react-table";
 
@@ -31,16 +32,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progresses } from "@/components/ai/progresses";
 
-interface DataTableProps<TData extends Record<any, any>, TValue> {
+type DataTableProps<TData extends Record<any, any>, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filtering?: keyof TData;
-}
+  filteringLabel?: string;
+  totalCount?: number;
+  pagination?: boolean;
+};
 
 export function DataTable<TData extends Record<any, any>, TValue>({
   columns,
   data,
   filtering,
+  filteringLabel,
+  totalCount,
+  pagination = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -61,6 +68,7 @@ export function DataTable<TData extends Record<any, any>, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       rowSelection,
@@ -74,7 +82,7 @@ export function DataTable<TData extends Record<any, any>, TValue>({
       <div className="flex justify-between items-center pb-4">
         {filtering && (
           <Input
-            placeholder="Filter by company name"
+            placeholder={filteringLabel || ""}
             value={
               (table
                 .getColumn(filtering.toString())
@@ -167,6 +175,33 @@ export function DataTable<TData extends Record<any, any>, TValue>({
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-between">
+        {totalCount && (
+          <p>
+            Viser {table.getRowModel().rows.length} af {totalCount} resultater
+          </p>
+        )}
+        {pagination && (
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

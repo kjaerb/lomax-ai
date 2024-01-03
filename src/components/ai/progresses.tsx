@@ -1,8 +1,8 @@
 "use client";
 
 import useUserResponseStore from "@/stores/user-reponse-store";
-import { Progress } from "../ui/progress";
-import { useEffect, useMemo, useState } from "react";
+import { Progress } from "@/components/ui/progress";
+import { useMemo } from "react";
 
 interface ProgressesProps {}
 
