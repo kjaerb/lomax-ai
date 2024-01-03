@@ -4,7 +4,11 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 import { systemPrompt, systemPrompt2 } from "@/lib/constants/system-prompt";
 import { userCommentSchema } from "@/schemas/user-comment-schema";
 import { addUserResponse } from "@/data/user-response";
-import { segmentSchema } from "@/schemas/segment-schema";
+import {
+  segmentSchema,
+  segmentationCommentsSchema,
+} from "@/schemas/segment-schema";
+import { parseAISegmentString } from "@/lib/ai";
 
 const { OPEN_API_KEY, NPS_FINE_TUNE_MODEL } = process.env;
 
@@ -28,8 +32,13 @@ export async function POST(req: NextRequest) {
     const { messages, userSegment } = json;
 
     const parsedUserComment = segmentSchema.parse(userSegment);
-    const { companyAccountNumber, companyAccountName, rating, userId } =
-      parsedUserComment;
+    const {
+      companyAccountNumber,
+      companyAccountName,
+      userRating,
+      userId,
+      userComment,
+    } = parsedUserComment;
 
     const contextMessage = [...promptMessages, ...messages];
 
@@ -50,14 +59,18 @@ export async function POST(req: NextRequest) {
 
     const stream = OpenAIStream(response, {
       onCompletion: async (data) => {
-        const parsedRating = parseInt(rating.toString(), 10);
+        const parsedComments = parseAISegmentString(data);
+
+        const parsedRating = parseInt(userRating.toString(), 10);
 
         await addUserResponse({
-          comment: data,
+          userComment,
           companyAccountName: companyAccountName,
           companyAccountNumber: companyAccountNumber.toString(),
-          rating: parsedRating,
+          userRating: parsedRating,
           userId: userId,
+          negativeComment: parsedComments.negativeComments,
+          positiveComment: parsedComments.positiveComments,
         });
       },
     });

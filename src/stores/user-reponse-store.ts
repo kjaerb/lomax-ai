@@ -8,6 +8,7 @@ interface UserResponseStore {
   setUserResponses: (userResponses: UserResponseSegment[]) => void;
   setUserResponse: (userResponse: UserResponseSegment, index: number) => void;
   getUserResponse: (index: number) => UserResponseSegment | null;
+  getProgress: (index: number) => Progress;
   setProgress: (index: number, progress: Progress) => void;
   setSegmentTrigger: (
     index: number,
@@ -15,6 +16,7 @@ interface UserResponseStore {
   ) => void;
   setShouldSegment: (index: number, shouldSegment: boolean) => void;
   setMessages: (index: number, messages: Message[]) => void;
+  setReload: (index: number, reload: () => void) => void;
 }
 
 const useUserResponseStore = create<UserResponseStore>((set, get) => ({
@@ -28,6 +30,11 @@ const useUserResponseStore = create<UserResponseStore>((set, get) => ({
       }
       return { userResponses: updatedStates };
     }),
+  getProgress: (index) => {
+    const state = get().userResponses[index];
+    if (!state) return "not_started";
+    return state.segment.progress;
+  },
   getUserResponse: (index) => {
     const state = get().userResponses[index];
     if (!state) return null;
@@ -62,6 +69,14 @@ const useUserResponseStore = create<UserResponseStore>((set, get) => ({
       const updatedStates = [...state.userResponses];
       if (index >= 0 && index < updatedStates.length) {
         updatedStates[index].segment.messages = messages;
+      }
+      return { userResponses: updatedStates };
+    }),
+  setReload: (index, reload) =>
+    set((state) => {
+      const updatedStates = [...state.userResponses];
+      if (index >= 0 && index < updatedStates.length) {
+        updatedStates[index].segment.reload = reload;
       }
       return { userResponses: updatedStates };
     }),

@@ -10,11 +10,11 @@ export function useSegment({
   userSegment,
   api = "/api/ai/segment-comment",
 }: SegmentProps) {
-  const { rating, comment } = userSegment;
+  const { userRating, userComment } = userSegment;
 
   const initialMessages = {
-    rating,
-    comment,
+    userRating,
+    userComment,
   };
 
   return useChat({

@@ -16,16 +16,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import useUserResponseStore from "@/stores/user-reponse-store";
 import { useState } from "react";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { ExportSchema } from "@/schemas/export-schema";
 
 interface ExportToCSVDialogProps {
+  data: ExportSchema[];
   disabled?: boolean;
 }
 
-export function ExportToCSVDialog({ disabled }: ExportToCSVDialogProps) {
-  const { userResponses } = useUserResponseStore();
+export function ExportToCSVDialog({ data, disabled }: ExportToCSVDialogProps) {
   const [filename, setFilename] = useState<string>(
     `nps-segment-${new Date().toISOString()}`
   );
@@ -62,12 +62,7 @@ export function ExportToCSVDialog({ disabled }: ExportToCSVDialogProps) {
             <Button>Luk</Button>
           </DialogClose>
           <Button variant={"success"}>
-            <CSVLink
-              filename={`${filename}.csv`}
-              data={userResponses.map(({ segment, ...rest }) => {
-                return rest;
-              })}
-            >
+            <CSVLink filename={`${filename}.csv`} data={data}>
               Export to CSV
             </CSVLink>
           </Button>

@@ -14,13 +14,15 @@ enum USER_ROLE {
   USER
 }
 
-model UserReponse {
+model AISegmentation {
   id                   Int      @id @default(autoincrement())
   createdAt            DateTime @default(now())
   companyAccountNumber String
   companyAccountName   String
-  rating               Int
-  comment              String
+  userRating           Int
+  userComment          String
+  positiveComment      String[]
+  negativeComment      String[]
   userId               String
   user                 User     @relation(fields: [userId], references: [id])
 }
@@ -38,8 +40,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -53,16 +54,16 @@ model Session {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  name          String?
-  email         String?       @unique
-  emailVerified DateTime?
-  password      String?
-  image         String?
-  role          USER_ROLE     @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-  UserReponse   UserReponse[]
+  id             String           @id @default(cuid())
+  name           String?
+  email          String?          @unique
+  emailVerified  DateTime?
+  password       String?
+  image          String?
+  role           USER_ROLE        @default(USER)
+  accounts       Account[]
+  sessions       Session[]
+  aiSegmentation AISegmentation[]
 }
 
 model VerificationToken {

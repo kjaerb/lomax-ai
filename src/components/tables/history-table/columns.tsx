@@ -9,7 +9,7 @@ type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 type UserResponseTable = ArrayElement<
-  Awaited<ReturnType<typeof api.userResponses.getUserRespones.query>>
+  Awaited<ReturnType<typeof api.aiSegmentation.getAISegmentations.query>>
 >;
 
 export const columns: ColumnDef<UserResponseTable>[] = [
@@ -31,6 +31,56 @@ export const columns: ColumnDef<UserResponseTable>[] = [
     header: "Company Account Name",
   },
   {
+    accessorKey: "userRating",
+    header: "Rating",
+  },
+  {
+    accessorKey: "userComment",
+    header: "Bruger kommentar",
+  },
+  {
+    accessorKey: "positiveComment",
+    header: "Positiv kommentarer",
+    cell: ({ row }) => {
+      const { positiveComment } = row.original;
+
+      return (
+        <div className="space-y-2">
+          {positiveComment.length > 0 ? (
+            positiveComment.map((comment, i) => (
+              <span key={`${comment}:${i}`} className={cn("block")}>
+                {comment}
+              </span>
+            ))
+          ) : (
+            <span className={cn("block")}>Ingen kommentarer</span>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "negativeComment",
+    header: "Negativ kommentarer",
+    cell: ({ row }) => {
+      const { negativeComment } = row.original;
+
+      return (
+        <div className="space-y-2">
+          {negativeComment.length > 0 ? (
+            negativeComment.map((comment, i) => (
+              <span key={`${comment}:${i}`} className={cn("block")}>
+                {comment}
+              </span>
+            ))
+          ) : (
+            <span className={cn("block")}>Ingen kommentarer</span>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "userId",
     header: "Bruger",
     cell: ({ row }) => {
@@ -49,27 +99,6 @@ export const columns: ColumnDef<UserResponseTable>[] = [
       const { createdAt } = row.original;
 
       return <span>{createdAt.toDateString()}</span>;
-    },
-  },
-  {
-    accessorKey: "comment",
-    header: "Kommentar",
-    cell: ({ row }) => {
-      const { comment } = row.original;
-
-      const commentObj = JSON.parse(comment);
-
-      return Object.keys(commentObj).map((key, index) => (
-        <div
-          key={index}
-          className={cn(
-            index === 0 && "text-green-500",
-            index === 1 && "text-red-500"
-          )}
-        >
-          <span className="font-bold">{key}:</span> {commentObj[key]}
-        </div>
-      ));
     },
   },
 ];

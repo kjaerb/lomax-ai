@@ -4,11 +4,14 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { useTransition } from "react";
+import { Icons } from "@/components/ui/icons";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 type OAuthProvider = {
   name: string;
   logo: JSX.Element;
   provider: string;
+  callbackUrl?: string;
 };
 
 const OAuthProviders: OAuthProvider[] = [
@@ -19,7 +22,7 @@ const OAuthProviders: OAuthProvider[] = [
   },
   {
     name: "Microsoft",
-    logo: <></>,
+    logo: <Icons.Microsoft height={24} width={24} />,
     provider: "microsoft",
   },
 ];
@@ -28,7 +31,14 @@ export function OAuths() {
   const [isPending, startTransition] = useTransition();
 
   async function handleSignIn(provider: string) {
-    startTransition(() => new Promise(() => signIn(provider)));
+    startTransition(
+      () =>
+        new Promise(() =>
+          signIn(provider, {
+            callbackUrl: DEFAULT_LOGIN_REDIRECT,
+          })
+        )
+    );
   }
 
   return (

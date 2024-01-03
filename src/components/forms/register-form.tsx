@@ -41,7 +41,7 @@ export function RegisterForm({}: RegisterFormProps) {
       if (response.success) {
         toast.success("Bruger oprettet");
         await login(data);
-        redirect("/nps/dashboard");
+        redirect("/nps/segment");
       } else if (response.errors) {
         if (response.errors instanceof ZodError) {
           toast.error(response.errors.message);

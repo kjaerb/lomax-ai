@@ -5,6 +5,8 @@ import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { navigationLinks } from "@/lib/constants/navigation";
 import { ActiveLinks } from "@/components/navigation/active-links";
+import { SignOut } from "@/components/auth/sign-out";
+import { LogOut } from "lucide-react";
 
 interface SidebarProps {}
 
@@ -15,7 +17,7 @@ export function Sidebar({}: SidebarProps) {
   }, [pathname]);
 
   return (
-    <aside className="h-full flex-col shadow-lg border-r p-2 hidden sm:flex min-w-[200px] max-w-[200px]">
+    <aside className="h-screen max-h-screen flex-col shadow-lg border-r p-2 hidden sm:flex min-w-[200px] max-w-[200px]">
       <Logo className="py-2" />
       <div className="flex flex-col justify-between h-full mt-5">
         <ActiveLinks
@@ -25,6 +27,10 @@ export function Sidebar({}: SidebarProps) {
             active: "default",
           }}
         />
+      </div>
+      <div className="flex justify-between items-center">
+        <SignOut variant={"link"} />
+        <LogOut />
       </div>
     </aside>
   );

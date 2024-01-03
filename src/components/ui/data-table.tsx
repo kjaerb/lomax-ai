@@ -177,12 +177,14 @@ export function DataTable<TData extends Record<any, any>, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between">
-        {totalCount && (
+        {totalCount ? (
           <p>
             Viser {table.getRowModel().rows.length} af {totalCount} resultater
           </p>
+        ) : (
+          <span></span>
         )}
-        {pagination && (
+        {pagination ? (
           <div className="flex items-center justify-end space-x-2 py-4">
             <Button
               variant="outline"
@@ -201,6 +203,8 @@ export function DataTable<TData extends Record<any, any>, TValue>({
               Next
             </Button>
           </div>
+        ) : (
+          <span></span>
         )}
       </div>
     </>

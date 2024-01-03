@@ -38,6 +38,7 @@ export type UserResponse = z.infer<typeof userResponseSchema>;
 export const segment = z.object({
   messages: z.custom<Message[]>(),
   segmentTrigger: z.custom<RefObject<HTMLButtonElement> | null>(),
+  reload: z.custom<() => void>(),
   shouldSegment: z.boolean(),
   progress: z.enum(progress),
 });

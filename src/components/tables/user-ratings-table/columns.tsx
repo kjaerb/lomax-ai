@@ -191,23 +191,33 @@ export const columns: ColumnDef<UserComment>[] = [
       const buttonRef = useRef<HTMLButtonElement>(null);
       const parsedRating = parseInt(rating.toString(), 10);
 
-      const { setSegmentTrigger, setProgress, setMessages } =
-        useUserResponseStore();
+      const {
+        setSegmentTrigger,
+        setProgress,
+        setMessages,
+        setReload,
+        getProgress,
+      } = useUserResponseStore();
 
-      const { messages, error, handleSubmit, isLoading } = useSegment({
+      const progress = getProgress(index);
+
+      const { messages, error, handleSubmit, isLoading, reload } = useSegment({
         userSegment: {
-          comment: userComment,
-          rating: parsedRating,
+          userComment,
+          userRating: parsedRating,
           companyAccountName: companyName,
           companyAccountNumber: companyAccountNumber.toString(),
           userId: userId,
+          negativeComment: [],
+          positiveComment: [],
         },
       });
 
       useEffect(() => {
         if (!buttonRef.current) return;
         setSegmentTrigger(index, buttonRef);
-      }, [index, setSegmentTrigger]);
+        setReload(index, reload);
+      }, [index, setSegmentTrigger, setReload]);
 
       useEffect(() => {
         if (messages.length < 1) return;
@@ -230,9 +240,15 @@ export const columns: ColumnDef<UserComment>[] = [
 
       return (
         <form onSubmit={handleSubmit}>
-          <Button disabled={isLoading} ref={buttonRef}>
-            Start
-          </Button>
+          {progress === "not_started" || progress === "loading" ? (
+            <Button disabled={isLoading} ref={buttonRef} type="submit">
+              Start
+            </Button>
+          ) : (
+            <Button disabled={isLoading} type="button" onClick={() => reload()}>
+              Reload
+            </Button>
+          )}
         </form>
       );
     },

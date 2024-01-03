@@ -1,11 +1,13 @@
 import { db } from "@/server/db";
 import { PrismaMandatoryFields } from "@/types/prisma";
-import { UserReponse } from "@prisma/client";
+import { AISegmentation } from "@prisma/client";
 
 export async function addUserResponse(
-  data: PrismaMandatoryFields<UserReponse>
+  data: PrismaMandatoryFields<AISegmentation>
 ) {
-  return await db.userReponse.create({
-    data,
+  return await db.aISegmentation.create({
+    data: {
+      ...data,
+    },
   });
 }

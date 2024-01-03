@@ -24,4 +24,4 @@ export const apiAuthPrefix: string = "/api/auth" as const;
  * @description This file contains the default login redirect of the application
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/nps/dashboard" as const;
+export const DEFAULT_LOGIN_REDIRECT = "/nps/segment" as const;

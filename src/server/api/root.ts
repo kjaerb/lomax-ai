@@ -1,9 +1,9 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { userResponseRouter } from "./routers/user-response";
+import { createTRPCRouter } from "@/server/api/trpc";
 import { userRouter } from "./routers/user";
+import { aiSegmentationRouter } from "./routers/ai-segmentation";
 
 export const appRouter = createTRPCRouter({
-  userResponses: userResponseRouter,
+  aiSegmentation: aiSegmentationRouter,
   user: userRouter,
 });
 

@@ -30,7 +30,7 @@ export async function AuthCard({ children }: AuthCardProps) {
               logge ind som en anden bruger, skal du først logge ud.
             </CardDescription>
             <Button variant={"secondary"}>
-              <Link href="/nps/dashboard">Gå til NPS</Link>
+              <Link href="/nps/segment">Gå til NPS</Link>
             </Button>
             <SignOut />
           </div>
