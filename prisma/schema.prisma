@@ -9,11 +9,6 @@ generator client {
   binaryTargets = ["native", "darwin-arm64"]
 }
 
-enum USER_ROLE {
-  ADMIN
-  USER
-}
-
 model AISegmentation {
   id                   Int      @id @default(autoincrement())
   createdAt            DateTime @default(now())
@@ -72,4 +67,9 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum USER_ROLE {
+  ADMIN
+  USER
 }

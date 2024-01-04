@@ -1,17 +1,27 @@
-import Azure from "next-auth/providers/azure-ad";
-import Github from "next-auth/providers/github";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import GithubProvider from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import { loginSchema } from "./schemas/auth-schema";
 import { getUserByEmail } from "./data/user";
 import bcrypt from "bcryptjs";
 
-const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
+const {
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  AZURE_AD_CLIENT_SECRET,
+  AZURE_AD_CLIENT_ID,
+  AZURE_AD_TENANT_ID,
+} = process.env;
 
 export default {
   providers: [
-    Azure,
-    Github({
+    AzureADProvider({
+      clientId: AZURE_AD_CLIENT_ID,
+      clientSecret: AZURE_AD_CLIENT_SECRET,
+      tenantId: AZURE_AD_TENANT_ID,
+    }),
+    GithubProvider({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
     }),

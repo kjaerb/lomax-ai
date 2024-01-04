@@ -23,7 +23,7 @@ const OAuthProviders: OAuthProvider[] = [
   {
     name: "Microsoft",
     logo: <Icons.Microsoft height={24} width={24} />,
-    provider: "microsoft",
+    provider: "azure-ad",
   },
 ];
 

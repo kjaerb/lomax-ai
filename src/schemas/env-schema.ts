@@ -7,6 +7,9 @@ const envSchema = z.object({
   DIRECT_URL: z.string().min(1),
   GITHUB_CLIENT_ID: z.string().min(1),
   GITHUB_CLIENT_SECRET: z.string().min(1),
+  AZURE_AD_CLIENT_ID: z.string().min(1),
+  AZURE_AD_CLIENT_SECRET: z.string().min(1),
+  AZURE_AD_TENANT_ID: z.string().min(1),
 });
 
 envSchema.parse(process.env);
