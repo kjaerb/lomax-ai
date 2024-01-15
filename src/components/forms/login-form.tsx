@@ -16,8 +16,6 @@ import { useTransition } from "react";
 import { login } from "@/actions/login";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
-import { toast } from "sonner";
-import { ZodError } from "zod";
 
 interface LoginFormProps {}
 
@@ -39,18 +37,19 @@ export function LoginForm({}: LoginFormProps) {
       const response = await login(data);
       if (response.success) {
         redirect("/nps/dashboard");
-      } else if (response.errors) {
-        if (response.errors instanceof ZodError) {
-          toast.error(response.errors.message);
-        } else {
-          toast.error(
-            Object.keys(response.errors)
-              // @ts-ignore
-              .map((k) => d.errors[k])
-              .join(", ")
-          );
-        }
       }
+      // else if (response.errors) {
+      //   if (response.errors instanceof ZodError) {
+      //     toast.error(response.errors.message);
+      //   } else {
+      //     toast.error(
+      //       Object.keys(response.errors)
+      //         // @ts-ignore
+      //         .map((k) => d.errors[k])
+      //         .join(", ")
+      //     );
+      //   }
+      // }
     });
   }
 

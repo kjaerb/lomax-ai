@@ -12,7 +12,7 @@ export async function Login({ ...props }: LoginProps) {
   if (session) return null;
 
   return (
-    <div {...props} className="space-y-2">
+    <div {...props} className="space-y-2 text-left">
       <LoginForm />
       <p className="text-center w-full text-sm text-gray-600">
         Har du ikke en bruger?{" "}

@@ -6,9 +6,9 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Logo } from "@/components/ui/logo";
-import { SignOut } from "../auth/sign-out";
+import { SignOut } from "@/components/auth/sign-out";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface AuthCardProps {
   children: React.ReactNode;

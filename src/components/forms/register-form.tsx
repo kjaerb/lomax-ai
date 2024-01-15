@@ -49,7 +49,7 @@ export function RegisterForm({}: RegisterFormProps) {
           toast.error(
             Object.keys(response.errors)
               // @ts-ignore
-              .map((k) => d.errors[k])
+              .map((k) => response.errors[k])
               .join(", ")
           );
         }

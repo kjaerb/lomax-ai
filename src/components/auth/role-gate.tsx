@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { getCurrentRole } from "@/data/user";
 import { USER_ROLE } from "@prisma/client";
 

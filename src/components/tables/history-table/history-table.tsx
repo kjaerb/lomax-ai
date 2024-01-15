@@ -5,23 +5,23 @@ import { ExportToCSVDialog } from "@/components/dialogs/export-to-csv-dialog";
 import { ExportSchema } from "@/schemas/export-schema";
 
 export async function HistoryTable() {
-  const history = await api.aiSegmentation.getNumAISegmentations.query({
+  const history = await api.npsAiSegmentation.getNumAISegmentations.query({
     amount: 50,
   });
-  const count = await api.aiSegmentation.getAISegmentationCount.query();
+  const count = await api.npsAiSegmentation.getAISegmentationCount.query();
 
   const exportData: ExportSchema[] = history.map((item) => ({
     CompanyAccountNo: item.companyAccountNumber,
     CompanyName: item.companyAccountName,
     Rating: item.userRating,
     UserComment: item.userComment,
-    SurverySendTime: "TODO",
-    PositiveComment1: item.positiveComment[0] || "",
-    PositiveComment2: item.positiveComment[1] || "",
-    PositiveComment3: item.positiveComment[2] || "",
-    NegativeComment1: item.negativeComment[0] || "",
-    NegativeComment2: item.negativeComment[1] || "",
-    NegativeComment3: item.negativeComment[2] || "",
+    SurveySendTime: item.surveySendTime.toDateString(),
+    PositiveComment1: item.positiveComments[0]?.name || "",
+    PositiveComment2: item.positiveComments[1]?.name || "",
+    PositiveComment3: item.positiveComments[2]?.name || "",
+    NegativeComment1: item.negativeComments[0]?.name || "",
+    NegativeComment2: item.negativeComments[1]?.name || "",
+    NegativeComment3: item.negativeComments[2]?.name || "",
   }));
 
   return (

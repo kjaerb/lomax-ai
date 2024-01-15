@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -11,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Lomax - NPS Dashboard",
-  description: "An internal tool for Lomax to analyse user segments.",
+  description: "An internal AI tool for Lomax",
 };
 
 export default function RootLayout({

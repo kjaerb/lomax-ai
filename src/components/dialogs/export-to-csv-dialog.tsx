@@ -18,14 +18,17 @@ import {
 } from "@/components/ui/accordion";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { ExportSchema } from "@/schemas/export-schema";
 
-interface ExportToCSVDialogProps {
-  data: ExportSchema[];
+interface ExportToCSVDialogProps<
+  TData extends Record<string, string | number>
+> {
+  data: TData[];
   disabled?: boolean;
 }
 
-export function ExportToCSVDialog({ data, disabled }: ExportToCSVDialogProps) {
+export function ExportToCSVDialog<
+  TData extends Record<string, string | number>
+>({ data, disabled }: ExportToCSVDialogProps<TData>) {
   const [filename, setFilename] = useState<string>(
     `nps-segment-${new Date().toISOString()}`
   );

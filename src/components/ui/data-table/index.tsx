@@ -22,15 +22,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Progresses } from "@/components/ai/progresses";
+import { ColumnFilter } from "./column-filter";
+import { SearchFilter } from "./search-filter";
+import { Pagination } from "./pagination";
 
 type DataTableProps<TData extends Record<any, any>, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -39,6 +33,7 @@ type DataTableProps<TData extends Record<any, any>, TValue> = {
   filteringLabel?: string;
   totalCount?: number;
   pagination?: boolean;
+  paginationCount?: number;
 };
 
 export function DataTable<TData extends Record<any, any>, TValue>({
@@ -81,52 +76,15 @@ export function DataTable<TData extends Record<any, any>, TValue>({
     <>
       <div className="flex justify-between items-center pb-4">
         {filtering && (
-          <Input
-            placeholder={filteringLabel || ""}
-            value={
-              (table
-                .getColumn(filtering.toString())
-                ?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table
-                .getColumn(filtering.toString())
-                ?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
+          <SearchFilter
+            table={table}
+            filtering={filtering}
+            filteringLabel={filteringLabel}
           />
         )}
-        <div className="flex gap-2 items-center">
-          <Progresses />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <ColumnFilter table={table} />
       </div>
-      <div className="rounded-md border overflow-x-scroll">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -176,37 +134,11 @@ export function DataTable<TData extends Record<any, any>, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between">
-        {totalCount ? (
-          <p>
-            Viser {table.getRowModel().rows.length} af {totalCount} resultater
-          </p>
-        ) : (
-          <span></span>
-        )}
-        {pagination ? (
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        ) : (
-          <span></span>
-        )}
-      </div>
+      <Pagination
+        table={table}
+        pagination={pagination}
+        totalCount={totalCount}
+      />
     </>
   );
 }

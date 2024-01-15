@@ -9,17 +9,47 @@ generator client {
   binaryTargets = ["native", "darwin-arm64"]
 }
 
-model AISegmentation {
-  id                   Int      @id @default(autoincrement())
-  createdAt            DateTime @default(now())
+model NPSAISegmentation {
+  id                   Int          @id @default(autoincrement())
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
   companyAccountNumber String
   companyAccountName   String
   userRating           Int
   userComment          String
-  positiveComment      String[]
-  negativeComment      String[]
+  surveySendTime       DateTime
+  positiveComments     NPSSegment[] @relation("positiveComments")
+  negativeComments     NPSSegment[] @relation("negativeComments")
   userId               String
-  user                 User     @relation(fields: [userId], references: [id])
+  user                 User         @relation(fields: [userId], references: [id])
+}
+
+model NPSSegment {
+  id                          Int                @id @default(autoincrement())
+  createdAt                   DateTime           @default(now())
+  updatedAt                   DateTime           @updatedAt
+  name                        String
+  npsGroupId                  Int?
+  npsGroup                    NPSGroup?          @relation(fields: [npsGroupId], references: [id])
+  npsAiSegmentationPositiveId Int?
+  npsAiSegmentationPositive   NPSAISegmentation? @relation("positiveComments", fields: [npsAiSegmentationPositiveId], references: [id])
+  npsAiSegmentationNegativeId Int?
+  npsAiSegmentationNegative   NPSAISegmentation? @relation("negativeComments", fields: [npsAiSegmentationNegativeId], references: [id])
+  type                        SegmentType
+}
+
+model NPSGroup {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  name       String       @unique
+  count      Int
+  NPSSegment NPSSegment[]
+}
+
+enum SegmentType {
+  Positive
+  Negative
 }
 
 model Account {
@@ -49,16 +79,18 @@ model Session {
 }
 
 model User {
-  id             String           @id @default(cuid())
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
   name           String?
-  email          String?          @unique
+  email          String?              @unique
   emailVerified  DateTime?
   password       String?
   image          String?
-  role           USER_ROLE        @default(USER)
+  role           USER_ROLE            @default(USER)
+  applications   APPLICATION_ACCESS[]
   accounts       Account[]
   sessions       Session[]
-  aiSegmentation AISegmentation[]
+  aiSegmentation NPSAISegmentation[]
 }
 
 model VerificationToken {
@@ -72,4 +104,8 @@ model VerificationToken {
 enum USER_ROLE {
   ADMIN
   USER
+}
+
+enum APPLICATION_ACCESS {
+  NPS
 }

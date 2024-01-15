@@ -1,17 +1,11 @@
-"use client";
-
-import { AIProgress } from "@/components/ai/ai-progress";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { UserComment } from "@/schemas/user-comment-schema";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
-import { useSegment } from "@/hooks/use-segment";
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import useUserResponseStore from "@/stores/user-reponse-store";
-import { Messages } from "@/components/ai/messages";
-import { useUserId } from "@/hooks/use-user";
+import { CheckboxRowHeader } from "@/components/tables/columns/checkbox-header";
+import { UserRatingCheckboxRow } from "./columns/user-rating-checkbox-row";
+import { SortableColumn } from "@/components/tables/columns/company-account-number";
+import { Comments } from "./columns/comments";
+import { AIProcess } from "./columns/ai-process";
+import { ManualStartProcess } from "./columns/start-process";
 
 export const headerTranslations: Record<keyof UserComment, string> = {
   companyAccountNumber: "Account Number",
@@ -25,32 +19,11 @@ export const headerTranslations: Record<keyof UserComment, string> = {
 export const columns: ColumnDef<UserComment>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
+    header: ({ table }) => <CheckboxRowHeader table={table} />,
     cell: ({ row }) => {
       const index = row.index;
-      const { setShouldSegment } = useUserResponseStore();
-      const isSelected = row.getIsSelected();
 
-      useEffect(() => {
-        setShouldSegment(index, isSelected);
-      }, [index, isSelected, setShouldSegment]);
-
-      return (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      );
+      return <UserRatingCheckboxRow index={index} row={row} />;
     },
     enableSorting: false,
     enableHiding: false,
@@ -59,14 +32,9 @@ export const columns: ColumnDef<UserComment>[] = [
     accessorKey: "companyAccountNumber",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="pl-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <SortableColumn column={column}>
           {headerTranslations["companyAccountNumber"]}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </SortableColumn>
       );
     },
   },
@@ -74,14 +42,9 @@ export const columns: ColumnDef<UserComment>[] = [
     accessorKey: "companyName",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="pl-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <SortableColumn column={column}>
           {headerTranslations["companyName"]}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </SortableColumn>
       );
     },
   },
@@ -89,14 +52,9 @@ export const columns: ColumnDef<UserComment>[] = [
     accessorKey: "rating",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          className="pl-0"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <SortableColumn column={column}>
           {headerTranslations["rating"]}
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </SortableColumn>
       );
     },
   },
@@ -117,46 +75,8 @@ export const columns: ColumnDef<UserComment>[] = [
     header: "Comments",
     cell: ({ row }) => {
       const index = row.index;
-      const { getUserResponse, setProgress } = useUserResponseStore();
-      const state = getUserResponse(index);
 
-      if (!state) return <></>;
-
-      const { progress, messages } = state.segment;
-
-      const [messageObjState, setMessageObjState] = useState<any>(null);
-
-      useEffect(() => {
-        try {
-          if (progress !== "finished") return;
-
-          const messageObj = JSON.parse(messages[messages.length - 1].content);
-          setMessageObjState(messageObj);
-        } catch (e) {
-          console.error(e);
-          setProgress(index, "error");
-        }
-      }, [progress, setProgress, setMessageObjState, index, messages]);
-
-      return (
-        <div className="space-y-2">
-          {messageObjState ? (
-            Object.keys(messageObjState).map((key, index) => (
-              <div
-                key={index}
-                className={cn(
-                  index === 0 && "text-green-500",
-                  index === 1 && "text-red-500"
-                )}
-              >
-                <span className="font-bold">{key}:</span> {messageObjState[key]}
-              </div>
-            ))
-          ) : (
-            <Messages messages={messages} showInitialMessage={false} />
-          )}
-        </div>
-      );
+      return <Comments index={index} />;
     },
   },
   {
@@ -164,93 +84,13 @@ export const columns: ColumnDef<UserComment>[] = [
     header: "Process",
     cell: ({ row }) => {
       const index = row.index;
-      const { getUserResponse } = useUserResponseStore();
-      const state = getUserResponse(index);
 
-      if (!state) return null;
-
-      return (
-        <AIProgress
-          progress={state.segment.progress}
-          className="flex justify-center items-center"
-        />
-      );
+      return <AIProcess index={index} />;
     },
   },
   {
     accessorKey: "startProcess",
     header: "Manual",
-    cell: ({ row }) => {
-      const userId = useUserId();
-
-      if (!userId) return null;
-
-      const { userComment, rating, companyAccountNumber, companyName } =
-        row.original;
-      const index = row.index;
-      const buttonRef = useRef<HTMLButtonElement>(null);
-      const parsedRating = parseInt(rating.toString(), 10);
-
-      const {
-        setSegmentTrigger,
-        setProgress,
-        setMessages,
-        setReload,
-        getProgress,
-      } = useUserResponseStore();
-
-      const progress = getProgress(index);
-
-      const { messages, error, handleSubmit, isLoading, reload } = useSegment({
-        userSegment: {
-          userComment,
-          userRating: parsedRating,
-          companyAccountName: companyName,
-          companyAccountNumber: companyAccountNumber.toString(),
-          userId: userId,
-          negativeComment: [],
-          positiveComment: [],
-        },
-      });
-
-      useEffect(() => {
-        if (!buttonRef.current) return;
-        setSegmentTrigger(index, buttonRef);
-        setReload(index, reload);
-      }, [index, setSegmentTrigger, setReload]);
-
-      useEffect(() => {
-        if (messages.length < 1) return;
-
-        if (isLoading) {
-          setProgress(index, "loading");
-          setMessages(index, messages);
-          return;
-        }
-
-        if (error) {
-          setProgress(index, "error");
-          setMessages(index, messages);
-          return;
-        }
-
-        setProgress(index, "finished");
-        setMessages(index, messages);
-      }, [messages, error, isLoading, setProgress, setMessages, index]);
-
-      return (
-        <form onSubmit={handleSubmit}>
-          {progress === "not_started" || progress === "loading" ? (
-            <Button disabled={isLoading} ref={buttonRef} type="submit">
-              Start
-            </Button>
-          ) : (
-            <Button disabled={isLoading} type="button" onClick={() => reload()}>
-              Reload
-            </Button>
-          )}
-        </form>
-      );
-    },
+    cell: ({ row }) => <ManualStartProcess row={row} />,
   },
 ];

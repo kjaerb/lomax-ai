@@ -1,15 +1,17 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { api } from "@/trpc/server";
-
 import { ColumnDef } from "@tanstack/react-table";
+import { ID } from "@/components/tables/columns/id";
+import { Comments } from "@/components/tables/columns/comments";
+import { UserID } from "@/components/tables/columns/user-id";
+import { Date } from "@/components/tables/columns/date";
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 type UserResponseTable = ArrayElement<
-  Awaited<ReturnType<typeof api.aiSegmentation.getAISegmentations.query>>
+  Awaited<ReturnType<typeof api.npsAiSegmentation.getAISegmentations.query>>
 >;
 
 export const columns: ColumnDef<UserResponseTable>[] = [
@@ -19,7 +21,7 @@ export const columns: ColumnDef<UserResponseTable>[] = [
     cell: ({ row }) => {
       const { id } = row.original;
 
-      return <span>{id}</span>;
+      return <ID id={id} />;
     },
   },
   {
@@ -39,45 +41,30 @@ export const columns: ColumnDef<UserResponseTable>[] = [
     header: "Bruger kommentar",
   },
   {
+    accessorKey: "surveySendTime",
+    header: "Survey Send Time",
+    cell: ({ row }) => {
+      const { surveySendTime } = row.original;
+
+      return <Date date={surveySendTime} />;
+    },
+  },
+  {
     accessorKey: "positiveComment",
     header: "Positiv kommentarer",
     cell: ({ row }) => {
-      const { positiveComment } = row.original;
+      const { positiveComments } = row.original;
 
-      return (
-        <div className="space-y-2">
-          {positiveComment.length > 0 ? (
-            positiveComment.map((comment, i) => (
-              <span key={`${comment}:${i}`} className={cn("block")}>
-                {comment}
-              </span>
-            ))
-          ) : (
-            <span className={cn("block")}>Ingen kommentarer</span>
-          )}
-        </div>
-      );
+      return <Comments comments={positiveComments} />;
     },
   },
   {
     accessorKey: "negativeComment",
     header: "Negativ kommentarer",
     cell: ({ row }) => {
-      const { negativeComment } = row.original;
+      const { negativeComments } = row.original;
 
-      return (
-        <div className="space-y-2">
-          {negativeComment.length > 0 ? (
-            negativeComment.map((comment, i) => (
-              <span key={`${comment}:${i}`} className={cn("block")}>
-                {comment}
-              </span>
-            ))
-          ) : (
-            <span className={cn("block")}>Ingen kommentarer</span>
-          )}
-        </div>
-      );
+      return <Comments comments={negativeComments} />;
     },
   },
   {
@@ -85,11 +72,8 @@ export const columns: ColumnDef<UserResponseTable>[] = [
     header: "Bruger",
     cell: ({ row }) => {
       const { user } = row.original;
-      if (!user) return <span>Ukendt bruger</span>;
 
-      if (!user.name) return <span>{user.email}</span>;
-
-      return <span>{user.name}</span>;
+      return <UserID user={user} />;
     },
   },
   {
@@ -98,7 +82,7 @@ export const columns: ColumnDef<UserResponseTable>[] = [
     cell: ({ row }) => {
       const { createdAt } = row.original;
 
-      return <span>{createdAt.toDateString()}</span>;
+      return <Date date={createdAt} />;
     },
   },
 ];

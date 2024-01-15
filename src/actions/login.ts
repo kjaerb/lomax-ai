@@ -27,6 +27,8 @@ export async function login(values: LoginSchema, callbackUrl?: string | null) {
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
+
+    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {

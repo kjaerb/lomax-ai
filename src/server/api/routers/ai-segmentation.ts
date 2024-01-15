@@ -1,28 +1,28 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 
-export const aiSegmentationRouter = createTRPCRouter({
-  getAISegmentations: publicProcedure.query(async ({ ctx }) => {
-    const aiSegmentations = await ctx.db.aISegmentation.findMany({
-      include: { user: true },
+export const npsAiSegmentationRouter = createTRPCRouter({
+  getAISegmentations: protectedProcedure.query(async ({ ctx }) => {
+    const aiSegmentations = await ctx.db.nPSAISegmentation.findMany({
+      include: { user: true, negativeComments: true, positiveComments: true },
     });
 
     return aiSegmentations;
   }),
-  getNumAISegmentations: publicProcedure
+  getNumAISegmentations: protectedProcedure
     .input(z.object({ amount: z.number() }))
     .query(async ({ ctx, input }) => {
       const { amount } = input;
 
-      const aiSegmentations = await ctx.db.aISegmentation.findMany({
-        include: { user: true },
+      const aiSegmentations = await ctx.db.nPSAISegmentation.findMany({
+        include: { user: true, negativeComments: true, positiveComments: true },
         take: amount,
       });
 
       return aiSegmentations;
     }),
-  getAISegmentationCount: publicProcedure.query(async ({ ctx }) => {
-    const count = await ctx.db.aISegmentation.count();
+  getAISegmentationCount: protectedProcedure.query(async ({ ctx }) => {
+    const count = await ctx.db.nPSAISegmentation.count();
     return count;
   }),
 });

@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  frontend:
+    image: docker-nextjs-dev
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./prisma:/app/prisma
+      - /app/node_modules
+      - /app/.next

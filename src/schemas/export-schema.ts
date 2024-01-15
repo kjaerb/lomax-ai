@@ -5,7 +5,7 @@ export const exportSchema = z.object({
   CompanyName: z.string(),
   Rating: z.number().or(z.string()),
   UserComment: z.string(),
-  SurverySendTime: z.string(),
+  SurveySendTime: z.string(),
   PostiveComment1: z.string().optional(),
   PostiveComment2: z.string().optional(),
   PostiveComment3: z.string().optional(),

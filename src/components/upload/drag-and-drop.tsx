@@ -18,6 +18,7 @@ import {
 import Papa from "papaparse";
 import useUserResponseStore from "@/stores/user-reponse-store";
 import { headerTranslations } from "@/components/tables/user-ratings-table/columns";
+import { User } from "next-auth";
 
 interface DragAndDropProps {
   closeDialogRef?: React.RefObject<HTMLButtonElement>;
@@ -59,7 +60,8 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
 
                 const keys = data[0] as string[];
                 const mappedObject = data.slice(1, data.length).map((line) => {
-                  let mappedObj: UserResponseSegment = {
+                  //possible error
+                  let mappedObj = {
                     segment: {
                       progress: "not_started",
                       messages: [],
@@ -119,7 +121,7 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
         }
       });
     },
-    [headerMappings, includeEmptyComments, setUserResponses]
+    [headerMappings, includeEmptyComments, setUserResponses, closeDialogRef]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -143,7 +145,8 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
                   <p>Drop filen her ...</p>
                 ) : (
                   <p>
-                    Drag 'n' drop filen hertil eller klik inden for stregerne
+                    Drag &apos;n&apos; drop filen hertil eller klik inden for
+                    stregerne
                   </p>
                 )}
               </>

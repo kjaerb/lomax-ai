@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { PrismaMandatoryFields } from "@/types/prisma";
-import { AISegmentation } from "@prisma/client";
+import { NPSAISegmentation } from "@prisma/client";
 import { segmentationGroups } from "@/lib/constants/segmentation-groups";
 
 export const segmentationCommentsSchema = z.object({
@@ -10,7 +10,8 @@ export const segmentationCommentsSchema = z.object({
 
 export type SegmentationComments = z.infer<typeof segmentationCommentsSchema>;
 
-export const segmentSchema = z.custom<PrismaMandatoryFields<AISegmentation>>();
+export const segmentSchema =
+  z.custom<PrismaMandatoryFields<NPSAISegmentation>>();
 
 export type UserCommentSegment = z.infer<typeof segmentSchema>;
 

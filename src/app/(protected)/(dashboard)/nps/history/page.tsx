@@ -1,12 +1,15 @@
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { HistoryTable } from "@/components/tables/history-table/history-table";
-import { getHistory } from "@/data/history";
+import { Suspense } from "react";
 
 interface HistoryPageProps {}
 
 export default function HistoryPage({}: HistoryPageProps) {
   return (
     <div>
-      <HistoryTable />
+      <Suspense fallback={<TableSkeleton />}>
+        <HistoryTable />
+      </Suspense>
     </div>
   );
 }

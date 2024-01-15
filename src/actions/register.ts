@@ -4,7 +4,16 @@ import bcrypt from "bcryptjs";
 import { registerSchema, RegisterSchema } from "@/schemas/auth-schema";
 import { createUser, getUserByEmail } from "@/data/user";
 
+const { NODE_ENV } = process.env;
+
 export async function register(values: RegisterSchema) {
+  if (NODE_ENV === "production")
+    return {
+      errors: {
+        register: "Registrering er ikke tilladt",
+      },
+    };
+
   const validatedFields = registerSchema.safeParse(values);
 
   if (!validatedFields.success) {

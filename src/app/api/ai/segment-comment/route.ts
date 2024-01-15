@@ -2,15 +2,11 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { NextRequest, NextResponse } from "next/server";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { systemPrompt, systemPrompt2 } from "@/lib/constants/system-prompt";
-import { userCommentSchema } from "@/schemas/user-comment-schema";
 import { addUserResponse } from "@/data/user-response";
-import {
-  segmentSchema,
-  segmentationCommentsSchema,
-} from "@/schemas/segment-schema";
+import { segmentSchema } from "@/schemas/segment-schema";
 import { parseAISegmentString } from "@/lib/ai";
 
-const { OPEN_API_KEY, NPS_FINE_TUNE_MODEL } = process.env;
+const { OPEN_API_KEY } = process.env;
 
 const config = new Configuration({
   apiKey: OPEN_API_KEY,
@@ -19,7 +15,7 @@ const config = new Configuration({
 const promptMessages = [
   {
     role: "system",
-    content: systemPrompt,
+    content: systemPrompt2,
   },
 ];
 
@@ -38,12 +34,16 @@ export async function POST(req: NextRequest) {
       userRating,
       userId,
       userComment,
+      surveySendTime,
     } = parsedUserComment;
+
+    if (!userId) throw new Error("No user found");
+    if (!surveySendTime) throw new Error("No survey send time found");
 
     const contextMessage = [...promptMessages, ...messages];
 
     const response = await openai.createChatCompletion({
-      model: NPS_FINE_TUNE_MODEL,
+      model: "ft:gpt-3.5-turbo-1106:site-team-lomax::8foBJABg",
       stream: true,
       messages: contextMessage,
       temperature: 0,
@@ -61,16 +61,22 @@ export async function POST(req: NextRequest) {
       onCompletion: async (data) => {
         const parsedComments = parseAISegmentString(data);
 
+        if (parsedComments === null)
+          throw new Error("Error in formatting streamed string from AI");
+
         const parsedRating = parseInt(userRating.toString(), 10);
 
         await addUserResponse({
-          userComment,
-          companyAccountName: companyAccountName,
-          companyAccountNumber: companyAccountNumber.toString(),
-          userRating: parsedRating,
-          userId: userId,
-          negativeComment: parsedComments.negativeComments,
-          positiveComment: parsedComments.positiveComments,
+          data: {
+            companyAccountName,
+            companyAccountNumber,
+            userComment,
+            userId,
+            userRating: parsedRating,
+            surveySendTime,
+          },
+          negativeComments: parsedComments.negativeComments,
+          positiveComments: parsedComments.positiveComments,
         });
       },
     });
