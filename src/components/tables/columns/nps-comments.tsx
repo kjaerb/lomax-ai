@@ -5,7 +5,7 @@ interface NPSCommentsProps {
   comments: NPSSegment[];
 }
 
-export function Comments({ comments }: NPSCommentsProps) {
+export function NPSComments({ comments }: NPSCommentsProps) {
   return (
     <div className="space-y-2 flex flex-col">
       {comments.length > 0 &&

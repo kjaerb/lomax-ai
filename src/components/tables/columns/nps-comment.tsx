@@ -12,9 +12,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { apiClient } from "@/providers/trpc-provider";
-import { NPSSegment } from "@prisma/client";
+import { NPSSegment, SegmentType } from "@prisma/client";
 import { useState } from "react";
+
+const npsSegmentVariant: Record<keyof typeof SegmentType, string> = {
+  Negative: "text-red-500",
+  Positive: "text-emerald-500",
+};
 
 interface NPSCommentProps {
   comment: NPSSegment;
@@ -45,7 +51,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
   return (
     <Dialog onOpenChange={() => setShouldFetch(!shouldFetch)}>
       <DialogTrigger className="text-left">
-        <p>{comment.name}</p>
+        <p className={cn(npsSegmentVariant[comment.type])}>{comment.name}</p>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -1,12 +1,23 @@
-import { ReactNode } from "react";
+import { getUserById } from "@/data/user";
 import { Header } from "./_components/header";
 import { Sidebar } from "./_components/sidebar";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 interface DashboardLayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
+  const session = await auth();
+  if (!session) redirect("/");
+
+  const user = await getUserById(session.user.id);
+
+  if (!user) redirect("/");
+
   return (
     <div className=" h-screen flex">
       <Sidebar />

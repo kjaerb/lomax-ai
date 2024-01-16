@@ -3,7 +3,7 @@
 import { api } from "@/trpc/server";
 import { ColumnDef } from "@tanstack/react-table";
 import { ID } from "@/components/tables/columns/id";
-import { Comments } from "@/components/tables/columns/comments";
+import { NPSComments } from "@/components/tables/columns/nps-comments";
 import { UserID } from "@/components/tables/columns/user-id";
 import { Date } from "@/components/tables/columns/date";
 
@@ -51,20 +51,20 @@ export const columns: ColumnDef<UserResponseTable>[] = [
   },
   {
     accessorKey: "positiveComment",
-    header: "Positiv kommentarer",
+    header: "Positive kommentarer",
     cell: ({ row }) => {
       const { positiveComments } = row.original;
 
-      return <Comments comments={positiveComments} />;
+      return <NPSComments comments={positiveComments} />;
     },
   },
   {
     accessorKey: "negativeComment",
-    header: "Negativ kommentarer",
+    header: "Negative kommentarer",
     cell: ({ row }) => {
       const { negativeComments } = row.original;
 
-      return <Comments comments={negativeComments} />;
+      return <NPSComments comments={negativeComments} />;
     },
   },
   {

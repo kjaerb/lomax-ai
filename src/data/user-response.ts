@@ -13,10 +13,10 @@ export async function addUserResponse({
   positiveComments,
   negativeComments,
 }: AddUserResponseProps) {
-  // transaction to rollback if error
   return await db.$transaction(async (tx) => {
-    // create or connect nps segment to a nps group
+    // transaction to rollback if error
     const positive = await Promise.all(
+      // create or connect positive nps segment to a nps group
       positiveComments.map(async (comment) => {
         return await tx.nPSSegment.create({
           data: {
@@ -30,6 +30,7 @@ export async function addUserResponse({
                 create: {
                   name: comment,
                   count: 0,
+                  type: "Positive",
                 },
               },
             },
@@ -38,6 +39,7 @@ export async function addUserResponse({
       })
     );
     const negative = await Promise.all(
+      // create or connect negative nps segment to a nps group
       negativeComments.map(async (comment) => {
         return await tx.nPSSegment.create({
           data: {
@@ -51,6 +53,7 @@ export async function addUserResponse({
                 create: {
                   name: comment,
                   count: 0,
+                  type: "Negative",
                 },
               },
             },
@@ -59,8 +62,8 @@ export async function addUserResponse({
       })
     );
 
-    // updates the count of the nps group
     await tx.nPSGroup.updateMany({
+      // updates the count of the nps group
       where: {
         name: {
           in: [...positiveComments, ...negativeComments],

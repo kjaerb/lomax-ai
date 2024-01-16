@@ -11,7 +11,7 @@ export async function NPSGroupChart({}: NPSGroupChartProps) {
   const data = groups.map((group) => {
     return {
       name: group.name,
-      Mængde: group.count,
+      Antal: group.count,
     };
   });
 
@@ -22,13 +22,18 @@ export async function NPSGroupChart({}: NPSGroupChartProps) {
       <CardContent>
         <BarChart
           data={data}
-          categories={["Mængde"]}
+          categories={["Antal", "Type"]}
           index={"name"}
           yAxisWidth={48}
           showAnimation={true}
-          colors={["blue"]}
-          className="w-full h-[32rem] truncate bg-white"
+          colors={["green", "red"]}
+          className="w-full h-[32rem] truncate pt-6 bg-white"
           allowDecimals={false}
+          rotateLabelX={{
+            angle: 75,
+            xAxisHeight: 90,
+            verticalShift: 50,
+          }}
         />
       </CardContent>
     </Card>

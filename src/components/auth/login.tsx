@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { LoginForm } from "@/components/forms/login-form";
 import Link from "next/link";
 import { HTMLAttributes } from "react";
@@ -7,10 +6,6 @@ import { OAuths } from "./oauths";
 interface LoginProps extends HTMLAttributes<HTMLDivElement> {}
 
 export async function Login({ ...props }: LoginProps) {
-  const session = await auth();
-
-  if (session) return null;
-
   return (
     <div {...props} className="space-y-2 text-left">
       <LoginForm />

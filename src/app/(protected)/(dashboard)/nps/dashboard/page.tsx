@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 interface DashboardPageProps {}
 
-export default function DashboardPage({}: DashboardPageProps) {
+export default async function DashboardPage({}: DashboardPageProps) {
   return (
     <Suspense fallback={"loading..."}>
       <NPSGroupChart />

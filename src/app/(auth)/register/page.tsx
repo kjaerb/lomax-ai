@@ -10,7 +10,10 @@ export default async function RegisterPage({}: RegisterPageProps) {
         {process.env.NODE_ENV === "development" ? (
           <Register className="pb-4" />
         ) : (
-          <></>
+          <p>
+            Oprettelse af nye brugere er ikke tilgængeligt på nuværende
+            tidspunkt
+          </p>
         )}
       </AuthCard>
     </div>

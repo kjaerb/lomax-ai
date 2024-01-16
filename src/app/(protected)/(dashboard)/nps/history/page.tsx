@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 interface HistoryPageProps {}
 
-export default function HistoryPage({}: HistoryPageProps) {
+export default async function HistoryPage({}: HistoryPageProps) {
   return (
     <div>
       <Suspense fallback={<TableSkeleton />}>

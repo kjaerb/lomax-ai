@@ -50,7 +50,7 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
     if (!buttonRef.current) return;
     setSegmentTrigger(index, buttonRef);
     setReload(index, reload);
-  }, [index, setSegmentTrigger, setReload]);
+  }, [index, setSegmentTrigger, setReload, reload]);
 
   useEffect(() => {
     if (messages.length < 1) return;
