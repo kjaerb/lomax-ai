@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: "An internal AI tool for Lomax",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

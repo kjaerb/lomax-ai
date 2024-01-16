@@ -35,16 +35,16 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
 
   const progress = getProgress(index);
 
-  // const { messages, error, handleSubmit, isLoading, reload } = useSegment({
-  //   userSegment: {
-  //     userComment,
-  //     userRating: parsedRating,
-  //     companyAccountName: companyName,
-  //     companyAccountNumber: companyAccountNumber.toString(),
-  //     userId: userId || "",
-  //     surveySendTime: parseDanishDate(surveySendTime), // possible problem if date is not in correct format
-  //   },
-  // });
+  const { messages, error, handleSubmit, isLoading, reload } = useSegment({
+    userSegment: {
+      userComment,
+      userRating: parsedRating,
+      companyAccountName: companyName,
+      companyAccountNumber: companyAccountNumber.toString(),
+      userId: userId || "",
+      surveySendTime: parseDanishDate(surveySendTime), // possible problem if date is not in correct format
+    },
+  });
 
   useEffect(() => {
     if (!buttonRef.current) return;
