@@ -1,7 +1,12 @@
 import { Progress, Segment } from "@/schemas/user-comment-schema";
 import { HTMLAttributes, ReactNode } from "react";
 import { XCircle, CheckCircle2 } from "lucide-react";
-import { Loading } from "../ui/loading";
+import { Loading } from "@/components/ui/loading";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 export const progressVariant: Record<Progress, ReactNode> = {
   error: <XCircle className="text-red-500" />,
@@ -22,5 +27,14 @@ interface AIProgressProps
     HTMLAttributes<HTMLDivElement> {}
 
 export function AIProgress({ progress, ...props }: AIProgressProps) {
-  return <div {...props}>{progressVariant[progress]}</div>;
+  return (
+    <HoverCard>
+      <HoverCardTrigger className="cursor-pointer">
+        <div {...props} aria-label={progressTranslation[progress]}>
+          {progressVariant[progress]}
+        </div>
+      </HoverCardTrigger>
+      <HoverCardContent>{progressTranslation[progress]}</HoverCardContent>
+    </HoverCard>
+  );
 }

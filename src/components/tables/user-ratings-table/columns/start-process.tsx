@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { useSegment } from "@/hooks/use-segment";
 import { useUserId } from "@/hooks/use-user";
@@ -35,16 +37,18 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
 
   const progress = getProgress(index);
 
-  const { messages, error, handleSubmit, isLoading, reload } = useSegment({
-    userSegment: {
-      userComment,
-      userRating: parsedRating,
-      companyAccountName: companyName,
-      companyAccountNumber: companyAccountNumber.toString(),
-      userId: userId || "",
-      surveySendTime: parseDanishDate(surveySendTime), // possible problem if date is not in correct format
-    },
-  });
+  const { messages, error, handleSubmit, isLoading, reload, stop } = useSegment(
+    {
+      userSegment: {
+        userComment,
+        userRating: parsedRating,
+        companyAccountName: companyName,
+        companyAccountNumber: companyAccountNumber.toString(),
+        userId: userId || "",
+        surveySendTime: parseDanishDate(surveySendTime) || new Date(), // possible problem if date is not in correct format
+      },
+    }
+  );
 
   useEffect(() => {
     if (!buttonRef.current) return;
@@ -75,12 +79,21 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {progress === "not_started" || progress === "loading" ? (
+      {progress === "loading" ? (
+        <Button
+          onClick={() => {
+            setProgress(index, "not_started");
+            stop();
+          }}
+        >
+          Stop
+        </Button>
+      ) : progress === "not_started" ? (
         <Button disabled={isLoading} ref={buttonRef} type="submit">
           Start
         </Button>
       ) : (
-        <Button disabled={isLoading} type="button" onClick={() => reload()}>
+        <Button disabled={isLoading} type="submit" onClick={() => reload()}>
           Reload
         </Button>
       )}

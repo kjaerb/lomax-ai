@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 interface PaginationProps<TData extends Record<any, any>> {
   table: Table<TData>;
   pagination?: boolean;
-  totalCount?: number;
+  totalCount: number;
 }
 
 export function Pagination<TData extends Record<any, any>>({
@@ -33,11 +33,18 @@ export function Pagination<TData extends Record<any, any>>({
             <SelectValue placeholder={table.getState().pagination.pageSize} />
           </SelectTrigger>
           <SelectContent>
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <SelectItem key={pageSize} value={`${pageSize}`}>
-                {pageSize}
-              </SelectItem>
-            ))}
+            {[10, 20, 30, 40, 50, "Vis alle"].map((pageSize) => {
+              const isAll = pageSize === "Vis alle";
+
+              return (
+                <SelectItem
+                  key={pageSize}
+                  value={isAll ? `${totalCount}` : `${pageSize}`}
+                >
+                  {pageSize}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>

@@ -8,12 +8,14 @@ export async function NPSGroupChart({}: NPSGroupChartProps) {
   const groups = await db.nPSGroup.findMany();
 
   const categories = groups.map((group) => group.name);
-  const data = groups.map((group) => {
-    return {
-      name: group.name,
-      Antal: group.count,
-    };
-  });
+  const data = groups
+    .sort((a, b) => a.count - b.count)
+    .map((group) => {
+      return {
+        name: group.name,
+        Antal: group.count,
+      };
+    });
 
   if (!categories || !data) return null;
 
@@ -22,11 +24,11 @@ export async function NPSGroupChart({}: NPSGroupChartProps) {
       <CardContent>
         <BarChart
           data={data}
-          categories={["Antal", "Type"]}
+          categories={["Antal"]}
           index={"name"}
           yAxisWidth={48}
           showAnimation={true}
-          colors={["green", "red"]}
+          colors={["green"]}
           className="w-full h-[32rem] truncate pt-6 bg-white"
           allowDecimals={false}
           rotateLabelX={{

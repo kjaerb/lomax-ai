@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
       surveySendTime,
     } = parsedUserComment;
 
-    if (!userId) throw new Error("No user found");
-    if (!surveySendTime) throw new Error("No survey send time found");
+    if (!userId) throw "No user found";
+    if (!surveySendTime) throw "No survey send time found";
 
     const contextMessage = [...promptMessages, ...messages];
 
@@ -53,16 +53,18 @@ export async function POST(req: NextRequest) {
       presence_penalty: 0,
     });
 
-    if (!response.ok) {
-      return NextResponse.json("Something went wrong. Try again later");
-    }
+    if (!response.ok) throw "Something went wrong. Try again later";
 
     const stream = OpenAIStream(response, {
       onCompletion: async (data) => {
         const parsedComments = parseAISegmentString(data);
 
-        if (parsedComments === null)
-          throw new Error("Error in formatting streamed string from AI");
+        if (parsedComments === null) {
+          NextResponse.json({
+            error: "Error in formatting response from AI",
+          });
+          throw "Error in formatting response from AI";
+        }
 
         const parsedRating = parseInt(userRating.toString(), 10);
 
@@ -83,7 +85,7 @@ export async function POST(req: NextRequest) {
 
     return new StreamingTextResponse(stream);
   } catch (err) {
-    console.error(err);
-    return NextResponse.error();
+    console.error("Encountered error", err);
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }

@@ -1,14 +1,15 @@
 import { UserCommentSegment } from "@/schemas/segment-schema";
-import { useChat } from "ai/react";
+import { UseChatOptions, useChat } from "ai/react";
+import { PropsWithoutRef } from "react";
 
-interface SegmentProps {
+interface SegmentProps extends UseChatOptions {
   userSegment: UserCommentSegment;
-  api?: string;
 }
 
 export function useSegment({
   userSegment,
   api = "/api/ai/segment-comment",
+  ...props
 }: SegmentProps) {
   const { userRating, userComment } = userSegment;
 
@@ -21,5 +22,6 @@ export function useSegment({
     api,
     initialInput: JSON.stringify(initialMessages),
     body: { userSegment },
+    ...props,
   });
 }

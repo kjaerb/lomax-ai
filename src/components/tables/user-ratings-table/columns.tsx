@@ -81,7 +81,9 @@ export const columns: ColumnDef<UserComment>[] = [
   },
   {
     accessorKey: "aiProcess",
-    header: "Process",
+    header: ({ column }) => {
+      return <SortableColumn column={column}>Process</SortableColumn>;
+    },
     cell: ({ row }) => {
       const index = row.index;
 
