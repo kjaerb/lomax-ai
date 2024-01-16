@@ -82,7 +82,7 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
                   keys.forEach((key, index) => {
                     const mappedKey = Object.keys(headerMappings).find(
                       // @ts-ignore
-                      (k) => headerMappings[k] === key
+                      (k) => headerMappings[k] === key,
                     );
                     if (mappedKey) {
                       // @ts-ignore
@@ -99,7 +99,7 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
 
                 if (!includeEmptyComments) {
                   const filtered = parsedObject.filter(
-                    (obj) => obj.userResponse.userComment !== ""
+                    (obj) => obj.userResponse.userComment !== "",
                   );
                   setUserResponses(filtered);
                 } else {
@@ -121,7 +121,7 @@ export function DragAndDrop({ closeDialogRef }: DragAndDropProps) {
         }
       });
     },
-    [headerMappings, includeEmptyComments, setUserResponses, closeDialogRef]
+    [headerMappings, includeEmptyComments, setUserResponses, closeDialogRef],
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

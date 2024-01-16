@@ -15,7 +15,7 @@ import { parseAISegmentString } from "@/lib/ai";
 export function UserCommentTable() {
   const { userResponses } = useUserResponseStore();
   const [tableData, setTableData] = useState<UserResponse[]>(
-    userResponses.map((userResponses) => userResponses.userResponse)
+    userResponses.map((userResponses) => userResponses.userResponse),
   );
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function UserCommentTable() {
     if (Object.keys(tableData).length !== 0) return;
 
     setTableData(
-      userResponses.map((userResponses) => userResponses.userResponse)
+      userResponses.map((userResponses) => userResponses.userResponse),
     );
   }, [setTableData, userResponses, tableData]);
 
@@ -33,7 +33,7 @@ export function UserCommentTable() {
     return userResponses.map((response) => {
       const comments = parseAISegmentString(
         response.segment?.messages?.[response?.segment?.messages.length - 1]
-          ?.content || ""
+          ?.content || "",
       );
 
       return {

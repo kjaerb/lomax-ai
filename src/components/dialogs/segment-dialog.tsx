@@ -20,11 +20,11 @@ export function SegmentDialog({ disabled }: SegmentDialogProps) {
 
   function segment() {
     const filteredStates = userResponses.filter(
-      (response) => response.segment.shouldSegment
+      (response) => response.segment.shouldSegment,
     );
 
     filteredStates.map((userResponses) =>
-      userResponses.segment.segmentTrigger?.current?.click()
+      userResponses.segment.segmentTrigger?.current?.click(),
     );
     closeSegmentDialogRef.current?.click();
   }
@@ -46,7 +46,7 @@ export function SegmentDialog({ disabled }: SegmentDialogProps) {
           Dette vil segmentere{" "}
           {
             userResponses.filter(
-              (userResponses) => userResponses.segment.shouldSegment
+              (userResponses) => userResponses.segment.shouldSegment,
             ).length
           }{" "}
           rækker

@@ -50,7 +50,7 @@ export function RegisterForm({}: RegisterFormProps) {
             Object.keys(response.errors)
               // @ts-ignore
               .map((k) => response.errors[k])
-              .join(", ")
+              .join(", "),
           );
         }
       }

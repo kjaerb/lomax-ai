@@ -96,7 +96,7 @@ export function DataTable<TData extends Record<any, any>, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -115,7 +115,7 @@ export function DataTable<TData extends Record<any, any>, TValue>({
                     <TableCell key={cell.id} className="break-words">
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

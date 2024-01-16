@@ -24,7 +24,7 @@ export function ProgressStatusDialog({ disabled }: ProgressStatusDialogProps) {
   const { userResponses } = useUserResponseStore();
 
   const progresses = userResponses.map(
-    (userResponse) => userResponse.segment.progress
+    (userResponse) => userResponse.segment.progress,
   );
 
   function countOccurrences(array: Progress[]): Record<Progress, number> {

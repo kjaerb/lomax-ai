@@ -8,7 +8,7 @@ import {
  * @param data string
  */
 export function parseAISegmentString(
-  data: string
+  data: string,
 ): SegmentationComments | null {
   try {
     const JSONData = JSON.parse(data);

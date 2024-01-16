@@ -36,7 +36,7 @@ export async function addUserResponse({
             },
           },
         });
-      })
+      }),
     );
     const negative = await Promise.all(
       // create or connect negative nps segment to a nps group
@@ -59,7 +59,7 @@ export async function addUserResponse({
             },
           },
         });
-      })
+      }),
     );
 
     await tx.nPSGroup.updateMany({

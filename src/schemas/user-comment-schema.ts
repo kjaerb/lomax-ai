@@ -30,7 +30,7 @@ export const progress = [
 export type Progress = (typeof progress)[number];
 
 export const userResponseSchema = userCommentSchema.and(
-  feedbackSchema.optional()
+  feedbackSchema.optional(),
 );
 
 export type UserResponse = z.infer<typeof userResponseSchema>;

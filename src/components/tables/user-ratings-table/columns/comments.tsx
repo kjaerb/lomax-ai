@@ -24,7 +24,7 @@ export function Comments({ index }: CommentsProps) {
       if (progress !== "finished") return;
 
       const messageObj = parseAISegmentString(
-        messages[messages.length - 1].content
+        messages[messages.length - 1].content,
       );
 
       if (messageObj === null) return;

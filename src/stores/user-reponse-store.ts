@@ -12,7 +12,7 @@ interface UserResponseStore {
   setProgress: (index: number, progress: Progress) => void;
   setSegmentTrigger: (
     index: number,
-    segmentTrigger: RefObject<HTMLButtonElement>
+    segmentTrigger: RefObject<HTMLButtonElement>,
   ) => void;
   setShouldSegment: (index: number, shouldSegment: boolean) => void;
   setMessages: (index: number, messages: Message[]) => void;

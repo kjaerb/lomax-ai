@@ -24,7 +24,7 @@ export const SignOut = React.forwardRef<HTMLButtonElement, SignOutProps>(
         Log ud
       </Button>
     );
-  }
+  },
 );
 
 SignOut.displayName = "SignOut";

@@ -24,7 +24,7 @@ export const activeLinkVariant = cva(
       size: "default",
       textColor: "default",
     },
-  }
+  },
 );
 
 export type ActiveLinkType = {
@@ -54,7 +54,7 @@ export function ActiveLink({
       className={cn(
         activeLinkVariant({ size, textColor }),
         icon && "flex justify-between items-center gap-4",
-        pathname === href && activeLinkVariant({ active })
+        pathname === href && activeLinkVariant({ active }),
       )}
     >
       <span className="truncate">{label}</span>

@@ -30,8 +30,8 @@ export function OAuths() {
         new Promise(() =>
           signIn(provider, {
             callbackUrl: DEFAULT_LOGIN_REDIRECT,
-          })
-        )
+          }),
+        ),
     );
   }
 

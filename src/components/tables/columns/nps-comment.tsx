@@ -36,7 +36,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
       },
       {
         enabled: shouldFetch,
-      }
+      },
     );
   const { data: npsGroup } =
     apiClient.npsSegment.getSegmentGroupCountByName.useQuery(
@@ -45,7 +45,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
       },
       {
         enabled: shouldFetch,
-      }
+      },
     );
 
   return (
