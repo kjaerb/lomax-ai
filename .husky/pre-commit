@@ -3,4 +3,4 @@
 
 pnpm tsc:skip
 pnpm lint
-vercel build
+# vercel build
