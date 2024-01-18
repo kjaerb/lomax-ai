@@ -8,15 +8,13 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function DashboardLayout({
-  children,
-}: DashboardLayoutProps) {
-  const session = await auth();
-  if (!session) redirect("/");
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  // const session = await auth();
+  // if (!session) redirect("/");
 
-  const user = await getUserById(session.user.id);
+  // const user = await getUserById(session.user.id);
 
-  if (!user) redirect("/");
+  // if (!user) redirect("/");
 
   return (
     <div className=" h-screen flex">
