@@ -31,9 +31,11 @@ export async function AuthCard({ children }: AuthCardProps) {
               Du er allerede logget ind som {user.email}. Hvis du vil logge ind
               som en anden bruger, skal du først logge ud.
             </CardDescription>
-            <Button variant={"secondary"}>
-              <Link href="/nps/segment">Gå til NPS</Link>
-            </Button>
+            <Link href="/nps/segment">
+              <Button variant={"secondary"} className="w-full">
+                Gå til NPS
+              </Button>
+            </Link>
             <SignOut />
           </div>
         ) : (

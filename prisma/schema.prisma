@@ -88,7 +88,7 @@ model User {
   password       String?
   image          String?
   role           USER_ROLE            @default(USER)
-  applications   APPLICATION_ACCESS[]
+  applications   APPLICATION_ACCESS[] @default([])
   accounts       Account[]
   sessions       Session[]
   aiSegmentation NPSAISegmentation[]
