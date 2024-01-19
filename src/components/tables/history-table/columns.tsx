@@ -6,15 +6,16 @@ import { ID } from "@/components/tables/columns/id";
 import { NPSComments } from "@/components/tables/columns/nps-comments";
 import { UserID } from "@/components/tables/columns/user-id";
 import { Date } from "@/components/tables/columns/date";
+import { HistoryActionsColumn } from "@/components/tables/history-table/columns/actions/";
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-type UserResponseTable = ArrayElement<
+export type UserResponseTableColumns = ArrayElement<
   Awaited<ReturnType<typeof api.npsAiSegmentation.getAISegmentations.query>>
 >;
 
-export const columns: ColumnDef<UserResponseTable>[] = [
+export const columns: ColumnDef<UserResponseTableColumns>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -83,6 +84,13 @@ export const columns: ColumnDef<UserResponseTable>[] = [
       const { createdAt } = row.original;
 
       return <Date date={createdAt} />;
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: "",
+    cell: ({ row }) => {
+      return <HistoryActionsColumn row={row.original} />;
     },
   },
 ];

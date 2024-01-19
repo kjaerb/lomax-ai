@@ -36,7 +36,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
       },
       {
         enabled: shouldFetch,
-      },
+      }
     );
   const { data: npsGroup } =
     apiClient.npsSegment.getSegmentGroupCountByName.useQuery(
@@ -45,13 +45,20 @@ export function NPSComment({ comment }: NPSCommentProps) {
       },
       {
         enabled: shouldFetch,
-      },
+      }
     );
 
   return (
     <Dialog onOpenChange={() => setShouldFetch(!shouldFetch)}>
       <DialogTrigger className="text-left">
-        <p className={cn(npsSegmentVariant[comment.type])}>{comment.name}</p>
+        <p
+          className={cn(
+            npsSegmentVariant[comment.type],
+            " hover:shadow-md transition-all duration-200 rounded-md px-2 py-1 hover:border"
+          )}
+        >
+          {comment.name}
+        </p>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

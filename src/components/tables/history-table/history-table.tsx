@@ -1,8 +1,8 @@
-import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
 import { api } from "@/trpc/server";
 import { ExportToCSVDialog } from "@/components/dialogs/export-to-csv-dialog";
 import { ExportSchema } from "@/schemas/export-schema";
+import { GenericDataTable } from "@/components/ui/data-table";
 
 export async function HistoryTable() {
   const history = await api.npsAiSegmentation.getNumAISegmentations.query({
@@ -32,12 +32,19 @@ export async function HistoryTable() {
           disabled={exportData.length === 0}
         />
       </div>
-      <DataTable
+      <GenericDataTable
         data={history}
         columns={columns}
         totalCount={count}
         filtering="companyAccountName"
         filteringLabel="Søg efter virksomhed"
+        colVisibility={{
+          userRating: false,
+          id: false,
+          userId: false,
+          createdAt: false,
+          companyAccountNumber: false,
+        }}
       />
     </div>
   );

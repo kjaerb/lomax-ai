@@ -8,9 +8,9 @@ import { ImportCSVDialog } from "@/components/dialogs/import-csv-dialog";
 import { ProgressStatusDialog } from "@/components/dialogs/progress-status-dialog";
 import { ExportSchema } from "@/schemas/export-schema";
 import { useEffect, useMemo, useState } from "react";
-import { DataTable } from "@/components/ui/data-table";
 import { UserResponse } from "@/schemas/user-comment-schema";
 import { parseAISegmentString } from "@/lib/ai";
+import { GenericDataTable } from "@/components/ui/data-table";
 
 export function UserCommentTable() {
   const { userResponses } = useUserResponseStore();
@@ -64,13 +64,14 @@ export function UserCommentTable() {
           <ExportToCSVDialog disabled={actionsDisabled} data={dataToExport} />
         </div>
       </div>
-      <DataTable
+      <GenericDataTable
         columns={columns}
         data={tableData}
         filtering={"companyName"}
         filteringLabel="Søg efter virksomhed"
         pagination={true}
         totalCount={userResponses.length}
+        colVisibility={{}}
       />
     </div>
   );

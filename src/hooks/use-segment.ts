@@ -1,6 +1,7 @@
+import { revalidatePath } from "next/cache";
+import { apiClient } from "@/providers/trpc-provider";
 import { UserCommentSegment } from "@/schemas/segment-schema";
 import { UseChatOptions, useChat } from "ai/react";
-import { PropsWithoutRef } from "react";
 
 interface SegmentProps extends UseChatOptions {
   userSegment: UserCommentSegment;
@@ -23,5 +24,19 @@ export function useSegment({
     initialInput: JSON.stringify(initialMessages),
     body: { userSegment },
     ...props,
+  });
+}
+
+type DeleteSegmentProps = {
+  path: string;
+};
+
+export function useDeleteSegment({ path }: DeleteSegmentProps) {
+  const utils = apiClient.useUtils();
+  return apiClient.npsAiSegmentation.deleteAISegmentation.useMutation({
+    onSuccess: async () => {
+      utils.npsAiSegmentation.invalidate();
+      revalidatePath(path, "page");
+    },
   });
 }

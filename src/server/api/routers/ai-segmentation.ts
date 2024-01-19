@@ -25,4 +25,12 @@ export const npsAiSegmentationRouter = createTRPCRouter({
     const count = await ctx.db.nPSAISegmentation.count();
     return count;
   }),
+  deleteAISegmentation: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      return await ctx.db.nPSAISegmentation.delete({
+        where: { id },
+      });
+    }),
 });

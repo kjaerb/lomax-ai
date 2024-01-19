@@ -1,42 +1,29 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/server/db";
-import { BarChart } from "@tremor/react";
+import { BarList } from "@tremor/react";
 
 interface NPSGroupChartProps {}
 
 export async function NPSGroupChart({}: NPSGroupChartProps) {
   const groups = await db.nPSGroup.findMany();
 
-  const categories = groups.map((group) => group.name);
-  const data = groups
-    .sort((a, b) => a.count - b.count)
+  const sortedGroups = groups
+    .sort((a, b) => b.count - a.count)
     .map((group) => {
       return {
+        value: group.count,
         name: group.name,
-        Antal: group.count,
+        color: group.type === "Positive" ? "green" : "red",
       };
     });
 
-  if (!categories || !data) return null;
+  if (!sortedGroups) return null;
 
   return (
     <Card>
-      <CardContent>
-        <BarChart
-          data={data}
-          categories={["Antal"]}
-          index={"name"}
-          yAxisWidth={48}
-          showAnimation={true}
-          colors={["green"]}
-          className="w-full h-[32rem] truncate pt-6 bg-white"
-          allowDecimals={false}
-          rotateLabelX={{
-            angle: 75,
-            xAxisHeight: 90,
-            verticalShift: 50,
-          }}
-        />
+      <CardContent className="mt-6">
+        <p>Overblik over kategorier</p>
+        <BarList data={sortedGroups} showAnimation={true} className="pt-6" />
       </CardContent>
     </Card>
   );

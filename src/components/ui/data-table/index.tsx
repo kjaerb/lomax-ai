@@ -26,7 +26,10 @@ import { ColumnFilter } from "./column-filter";
 import { SearchFilter } from "./search-filter";
 import { Pagination } from "./pagination";
 
-type DataTableProps<TData extends Record<any, any>, TValue> = {
+type DataTableProps<
+  TData extends Record<string | number | symbol, any>,
+  TValue,
+> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filtering?: keyof TData;
@@ -34,24 +37,24 @@ type DataTableProps<TData extends Record<any, any>, TValue> = {
   totalCount: number;
   pagination?: boolean;
   paginationCount?: number;
+  colVisibility: Partial<Record<keyof TData, boolean>>;
 };
 
-export function DataTable<TData extends Record<any, any>, TValue>({
+export function GenericDataTable<TData extends Record<any, any>, TValue>({
   columns,
   data,
   filtering,
   filteringLabel,
   totalCount,
   pagination = true,
+  colVisibility,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    companyAccountNumber: false,
-    surveySendTime: false,
-    weekYear: false,
-  });
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    colVisibility as VisibilityState
+  );
 
   const table = useReactTable({
     data,
