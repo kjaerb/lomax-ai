@@ -5,7 +5,7 @@ This is the repository for all of the internal AI projects at Lomax A/S.
 ### Developer information
 
 #### Husky
-In order to keep a streamlined development process, `husky` hooks has been implemented. This means that before every commit, the application will be linted and fixed, before being able to push the code to git. Furthermore, a commit linting scheme has been implemented, such that you can only use <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank">conventional commits</a>. The commit schema can be seen [here](./commitlint.config.js)
+In order to keep a streamlined development process, `husky` hooks has been implemented. This means that before every commit, the application will be linted and fixed, before being able to push the code to git. Furthermore, a commit linting scheme has been implemented, such that you can only use <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank">conventional commits</a>. The commit schema can be seen [here](./commitlint.config.js). Lastly, before pushing the changes to git, the solution will be build locally to vercel, ensuring that the solution is able to be deployed.
 
 #### Node (PNPM): 
 **Prerequisites**
