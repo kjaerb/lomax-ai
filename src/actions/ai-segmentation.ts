@@ -3,7 +3,18 @@
 import { api } from "@/trpc/server";
 import { revalidatePath } from "next/cache";
 
-export async function deleteSegmentAction({ id }: { id: number }) {
+type DeleteSegmentationProps = {
+  id: number;
+  path?: string;
+};
+
+export async function deleteSegmentAction({
+  id,
+  path,
+}: DeleteSegmentationProps) {
   await api.npsAiSegmentation.deleteAISegmentation.mutate({ id });
-  revalidatePath("/nps/history", "page");
+
+  if (path) {
+    revalidatePath(path, "page");
+  }
 }

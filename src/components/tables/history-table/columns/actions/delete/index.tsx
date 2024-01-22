@@ -16,6 +16,7 @@ import { UserResponseTableColumns } from "@/components/tables/history-table/colu
 import { deleteSegmentAction } from "@/actions/ai-segmentation";
 import { useRef, useTransition } from "react";
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 interface DeleteProps {
   row: UserResponseTableColumns;
@@ -34,12 +35,13 @@ export function Delete({ row }: DeleteProps) {
 
   const [isPending, startTransition] = useTransition();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
 
   function deleteWrapper() {
     startTransition(async () => {
       toast.promise(
         new Promise(async (resolve) => {
-          await deleteSegmentAction({ id: row.id });
+          await deleteSegmentAction({ id: row.id, path: pathname });
           resolve(closeBtnRef.current?.click());
         }),
         {
@@ -53,11 +55,9 @@ export function Delete({ row }: DeleteProps) {
 
   return (
     <Dialog>
-      <DialogTrigger className="flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 w-full rounded-md transition-colors">
-        <>
-          <Trash2 className="h-4 w-4 mr-2" />
-          <span>Slet</span>
-        </>
+      <DialogTrigger className="flex items-center px-2 py-2 bg-red-100 hover:bg-red-200 w-full rounded-md transition-colors">
+        <Trash2 className="h-4 w-4 mr-2" />
+        <span>Slet</span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
