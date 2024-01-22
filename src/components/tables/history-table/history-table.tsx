@@ -5,9 +5,7 @@ import { ExportSchema } from "@/schemas/export-schema";
 import { GenericDataTable } from "@/components/ui/data-table";
 
 export async function HistoryTable() {
-  const history = await api.npsAiSegmentation.getNumAISegmentations.query({
-    amount: 50,
-  });
+  const history = await api.npsAiSegmentation.getAISegmentations.query();
   const count = await api.npsAiSegmentation.getAISegmentationCount.query();
 
   const exportData: ExportSchema[] = history.map((item) => ({

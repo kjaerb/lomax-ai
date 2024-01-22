@@ -47,6 +47,7 @@ export function Pagination<TData extends Record<any, any>>({
             })}
           </SelectContent>
         </Select>
+        <span>af {totalCount}</span>
       </div>
 
       {pagination ? (

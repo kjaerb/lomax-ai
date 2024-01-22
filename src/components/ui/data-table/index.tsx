@@ -77,7 +77,7 @@ export function GenericDataTable<TData extends Record<any, any>, TValue>({
 
   return (
     <>
-      <div className="flex justify-between items-center pb-4">
+      <div className="flex justify-between items-center pb-2">
         {filtering && (
           <SearchFilter
             table={table}

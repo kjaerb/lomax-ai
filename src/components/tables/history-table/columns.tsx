@@ -7,6 +7,7 @@ import { NPSComments } from "@/components/tables/columns/nps-comments";
 import { UserID } from "@/components/tables/columns/user-id";
 import { Date } from "@/components/tables/columns/date";
 import { HistoryActionsColumn } from "@/components/tables/history-table/columns/actions/";
+import { SortableColumn } from "../columns/company-account-number";
 
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
@@ -27,15 +28,21 @@ export const columns: ColumnDef<UserResponseTableColumns>[] = [
   },
   {
     accessorKey: "companyAccountNumber",
-    header: "Company Account Number",
+    header: ({ column }) => {
+      return <SortableColumn column={column}>Company Number</SortableColumn>;
+    },
   },
   {
     accessorKey: "companyAccountName",
-    header: "Company Account Name",
+    header: ({ column }) => {
+      return <SortableColumn column={column}>Company Name</SortableColumn>;
+    },
   },
   {
     accessorKey: "userRating",
-    header: "Rating",
+    header: ({ column }) => {
+      return <SortableColumn column={column}>Rating</SortableColumn>;
+    },
   },
   {
     accessorKey: "userComment",
@@ -43,7 +50,9 @@ export const columns: ColumnDef<UserResponseTableColumns>[] = [
   },
   {
     accessorKey: "surveySendTime",
-    header: "Survey Send Time",
+    header: ({ column }) => {
+      return <SortableColumn column={column}>Survey Send Time</SortableColumn>;
+    },
     cell: ({ row }) => {
       const { surveySendTime } = row.original;
 
