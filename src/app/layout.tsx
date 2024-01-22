@@ -8,6 +8,7 @@ import { AuthProvider } from "@/providers/auth-provider";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/providers/trpc-provider";
 import { cookies } from "next/headers";
+import { ProgressBarProvider } from "@/providers/progress-bar-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

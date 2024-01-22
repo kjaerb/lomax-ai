@@ -54,7 +54,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
         <p
           className={cn(
             npsSegmentVariant[comment.type],
-            " hover:shadow-md transition-all duration-200 rounded-md px-2 py-1 hover:border"
+            "transition-all duration-200 rounded-md px-2 py-1"
           )}
         >
           {comment.name}

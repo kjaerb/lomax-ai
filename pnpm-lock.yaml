@@ -107,6 +107,9 @@ dependencies:
   next-auth:
     specifier: 5.0.0-beta.4
     version: 5.0.0-beta.4(next@14.0.4)(react@18.2.0)
+  nextjs-progressbar:
+    specifier: ^0.0.16
+    version: 0.0.16(next@14.0.4)(react@18.2.0)
   openai-edge:
     specifier: ^1.2.2
     version: 1.2.2
@@ -1802,6 +1805,10 @@ packages:
 
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
+    dev: false
+
+  /@types/nprogress@0.2.3:
+    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
     dev: false
 
   /@types/papaparse@5.3.14:
@@ -4143,6 +4150,19 @@ packages:
       - babel-plugin-macros
     dev: false
 
+  /nextjs-progressbar@0.0.16(next@14.0.4)(react@18.2.0):
+    resolution: {integrity: sha512-GV0fD38EMD3vSDCmkq+tObmoup6QA91a6a9MxGuhJZuRk/9TNsrHGnIQQQ/sggkMkXuT4fBgF6jRjFwScDT3zA==}
+    peerDependencies:
+      next: '>= 6.0.0'
+      react: '>= 16.0.0'
+    dependencies:
+      '@types/nprogress': 0.2.3
+      next: 14.0.4(react-dom@18.2.0)(react@18.2.0)
+      nprogress: 0.2.0
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: true
@@ -4180,6 +4200,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-key: 3.1.1
+    dev: false
+
+  /nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
     dev: false
 
   /oauth4webapi@2.7.0:

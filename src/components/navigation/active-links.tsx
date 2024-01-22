@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const activeLinksVariant = cva("", {
   variants: {
     variant: {
-      default: " ",
+      default: "",
     },
     size: {
       default: "",
@@ -40,7 +40,7 @@ export function ActiveLinks({
       {...props}
       className={cn(activeLinksVariant({ variant, size }), className)}
     >
-      <p className="px-4 py-2 text-gray-500 dark:text-gray-300 uppercase text-sm">
+      <p className="p-2 text-gray-500 dark:text-gray-300 uppercase text-sm">
         {title}
       </p>
       <div className="">
