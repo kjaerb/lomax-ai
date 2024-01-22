@@ -15,12 +15,13 @@ import { Trash2 } from "lucide-react";
 import { UserResponseTableColumns } from "@/components/tables/history-table/columns";
 import { deleteSegmentAction } from "@/actions/ai-segmentation";
 import { useRef, useTransition } from "react";
+import { toast } from "sonner";
 
 interface DeleteProps {
-  segment: UserResponseTableColumns;
+  row: UserResponseTableColumns;
 }
 
-export function Delete({ segment }: DeleteProps) {
+export function Delete({ row }: DeleteProps) {
   const {
     companyAccountName,
     companyAccountNumber,
@@ -29,15 +30,24 @@ export function Delete({ segment }: DeleteProps) {
     surveySendTime,
     positiveComments,
     negativeComments,
-  } = segment;
+  } = row;
 
   const [isPending, startTransition] = useTransition();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
   function deleteWrapper() {
     startTransition(async () => {
-      await deleteSegmentAction({ id: segment.id });
-      closeBtnRef.current?.click();
+      toast.promise(
+        new Promise(async (resolve) => {
+          await deleteSegmentAction({ id: row.id });
+          resolve(closeBtnRef.current?.click());
+        }),
+        {
+          loading: "Sletter...",
+          success: "Segmentering slettet",
+          error: "Kunne ikke slettes - prøv igen senere",
+        }
+      );
     });
   }
 

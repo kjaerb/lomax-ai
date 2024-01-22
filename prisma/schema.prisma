@@ -29,8 +29,8 @@ model NPSSegment {
   createdAt                   DateTime           @default(now())
   updatedAt                   DateTime           @updatedAt
   name                        String
-  npsGroupId                  Int?
-  npsGroup                    NPSGroup?          @relation(fields: [npsGroupId], references: [id])
+  npsGroupId                  Int
+  npsGroup                    NPSGroup           @relation(fields: [npsGroupId], references: [id])
   npsAiSegmentationPositiveId Int?
   npsAiSegmentationPositive   NPSAISegmentation? @relation("positiveComments", fields: [npsAiSegmentationPositiveId], references: [id])
   npsAiSegmentationNegativeId Int?

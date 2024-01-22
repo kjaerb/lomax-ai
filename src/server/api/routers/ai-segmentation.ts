@@ -29,8 +29,37 @@ export const npsAiSegmentationRouter = createTRPCRouter({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
-      return await ctx.db.nPSAISegmentation.delete({
-        where: { id },
+
+      return await ctx.db.$transaction(async (tx) => {
+        const npsAISegment = await tx.nPSAISegmentation.delete({
+          where: { id },
+          include: {
+            negativeComments: true,
+            positiveComments: true,
+          },
+        });
+
+        const comments = [
+          ...npsAISegment.negativeComments,
+          ...npsAISegment.positiveComments,
+        ];
+
+        await Promise.all(
+          comments
+            .filter((comment) => comment.npsGroupId)
+            .map(async (comment) => {
+              await tx.nPSGroup.update({
+                where: {
+                  id: comment.npsGroupId,
+                },
+                data: {
+                  count: {
+                    decrement: 1,
+                  },
+                },
+              });
+            })
+        );
       });
     }),
 });
