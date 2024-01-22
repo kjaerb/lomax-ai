@@ -7,7 +7,7 @@ export const npsSegmentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { name } = input;
 
-      const npsSegment = await ctx.db.nPSSegment.findMany({
+      return await ctx.db.nPSSegment.findMany({
         where: {
           name,
         },
@@ -17,8 +17,6 @@ export const npsSegmentRouter = createTRPCRouter({
           npsGroup: true,
         },
       });
-
-      return npsSegment;
     }),
   getSegmentGroupCountByName: protectedProcedure
     .input(z.object({ name: z.string() }))

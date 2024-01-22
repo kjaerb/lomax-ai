@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
       presence_penalty: 0,
     });
 
-    if (!response.ok) throw "Something went wrong. Try again later";
+    if (!response.ok)
+      throw `Error in response from AI, ${response.status}, ${response.statusText}`;
 
     const stream = OpenAIStream(response, {
       onCompletion: async (data) => {

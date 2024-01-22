@@ -73,7 +73,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
           <div className="space-y-2">
             {npsSegments.map((segment) => (
               <div key={segment.id} className="border shadow-md rounded-md p-2">
-                <p>Tideligere kommentar:</p>
+                <p>{segment.createdAt.toDateString()}</p>
                 <span>
                   {segment.npsAiSegmentationNegative?.userComment ||
                     segment.npsAiSegmentationPositive?.userComment}
