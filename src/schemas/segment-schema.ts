@@ -17,19 +17,27 @@ export type UserCommentSegment = z.infer<typeof segmentSchema>;
 
 export const segmentationGroupsSchema = z.enum(segmentationGroups);
 
-export type SegmentationGroups = z.infer<typeof segmentationGroupsSchema> | "";
+export type SegmentationGroups = z.infer<typeof segmentationGroupsSchema>;
 
 export const updateSegmentSchema = z.object({
   positiveComments: z
     .object({
-      name: z.custom<SegmentationGroups>(),
+      name: z
+        .custom<SegmentationGroups>()
+        .refine((value) => value.trim().length > 0, {
+          message: "Vælg venligst en gruppe",
+        }),
     })
     .array()
     .max(3)
     .min(0),
   negativeComments: z
     .object({
-      name: z.custom<SegmentationGroups>(),
+      name: z
+        .custom<SegmentationGroups>()
+        .refine((value) => value.trim().length > 0, {
+          message: "Vælg venligst en gruppe",
+        }),
     })
     .array()
     .max(3)

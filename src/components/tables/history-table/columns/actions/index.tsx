@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserResponseTableColumns } from "@/components/tables/history-table/columns";
 import { Delete } from "./delete";
-import { Update } from "./update";
+import { UpdateSegmentForm } from "./update";
 
 interface HistoryActionsColumnProps {
   row: UserResponseTableColumns;
@@ -18,7 +18,7 @@ export function HistoryActionsColumn({ row }: HistoryActionsColumnProps) {
       <DropdownMenuLabel>Actions</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuGroup className="text-sm">
-        <Update row={row} />
+        <UpdateSegmentForm row={row} />
         <Delete row={row} />
       </DropdownMenuGroup>
     </Actions>
