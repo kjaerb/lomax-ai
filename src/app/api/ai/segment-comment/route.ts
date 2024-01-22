@@ -1,7 +1,7 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { NextRequest, NextResponse } from "next/server";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-import { systemPrompt2, systemPrompt3 } from "@/lib/constants/system-prompt";
+import { systemPrompt3 } from "@/lib/constants/system-prompt";
 import { addUserResponse } from "@/data/user-response";
 import { segmentSchema } from "@/schemas/segment-schema";
 import { parseAISegmentString } from "@/lib/ai";

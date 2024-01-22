@@ -73,17 +73,17 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
 
     setProgress(index, "finished");
     setMessages(index, messages);
-  }, [messages, error, isLoading, setProgress, setMessages, index]);
+  }, [messages, error, isLoading, setProgress, setMessages, index, stop]);
 
   if (!userId) return null;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => handleSubmit(e)}>
       {progress === "loading" ? (
         <Button
           onClick={() => {
-            setProgress(index, "not_started");
             stop();
+            setProgress(index, "not_started");
           }}
         >
           Stop

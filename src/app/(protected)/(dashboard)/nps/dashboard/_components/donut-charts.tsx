@@ -29,14 +29,23 @@ export async function DonutCharts({}: DonutChartsProps) {
 
   return (
     <div className="flex gap-4 justify-between">
-      <KPITypeDonutChart data={data} type="Negative" />
-      <KPITypeDonutChart data={data} type="Positive" />
       <KPIDonutChart
         data={donutchartData}
+        title="Kommentarer"
         category={"count"}
         index={"type"}
         colors={["green", "red"]}
-        className="min-w-[10rem] h-full"
+        className="min-w-[10rem] h-[10rem]"
+      />
+      <KPITypeDonutChart
+        data={data}
+        type="Positive"
+        title="Positive kommentarer"
+      />
+      <KPITypeDonutChart
+        data={data}
+        type="Negative"
+        title="Negative kommentarer"
       />
     </div>
   );
