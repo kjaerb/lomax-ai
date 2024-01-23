@@ -1,5 +1,3 @@
-"use client";
-
 import { NPSGroupChart } from "@/components/charts/nps-group-chart";
 import { Suspense } from "react";
 import { DonutCharts } from "./_components/donut-charts";
@@ -13,10 +11,13 @@ export default function DashboardPage({}: DashboardPageProps) {
       <div>
         <DatePicker />
       </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <DonutCharts />
+      </Suspense>
 
-      <DonutCharts />
-
-      <NPSGroupChart />
+      <Suspense fallback={<div>Loading...</div>}>
+        <NPSGroupChart />
+      </Suspense>
     </div>
   );
 }

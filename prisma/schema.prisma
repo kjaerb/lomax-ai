@@ -19,8 +19,8 @@ model Company {
   id                   Int                 @id @default(autoincrement())
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
-  companyAccountNumber String
-  companyAccountName   String
+  companyAccountNumber String              @unique
+  companyAccountName   String              @unique
   npsAISegmentations   NPSAISegmentation[]
   country              COUNTRY             @default(UNKNOWN)
 }
@@ -39,8 +39,8 @@ model NPSAISegmentation {
   userComment    String
   surveySendTime DateTime
   segments       NPSSegment[]
-  companyId      Int?
-  company        Company?     @relation(fields: [companyId], references: [id])
+  companyId      String?
+  company        Company?     @relation(fields: [companyId], references: [companyAccountNumber])
   userId         String
   user           User         @relation(fields: [userId], references: [id])
   npsSource      NPS_SOURCE   @default(UNKNOWN)
@@ -54,26 +54,26 @@ enum SEGMENT_TYPE {
 }
 
 model NPSSegment {
-  id                  Int               @id @default(autoincrement())
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime          @updatedAt
+  id                  Int                @id @default(autoincrement())
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
   name                String
-  npsGroupId          Int
-  npsGroup            NPSGroup          @relation(fields: [npsGroupId], references: [id])
-  npsAISegmentationId Int
-  npsAISegmentation   NPSAISegmentation @relation(fields: [npsAISegmentationId], references: [id])
+  npsGroupId          Int?
+  npsGroup            NPSGroup?          @relation(fields: [npsGroupId], references: [id])
+  npsAISegmentationId Int?
+  npsAISegmentation   NPSAISegmentation? @relation(fields: [npsAISegmentationId], references: [id], onDelete: Cascade)
   type                SEGMENT_TYPE
 }
 
 model NPSGroup {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  name       String       @unique
-  count      Int
-  type       SEGMENT_TYPE
-  NPSSegment NPSSegment[]
-  country    COUNTRY      @default(UNKNOWN)
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  name        String       @unique
+  count       Int
+  type        SEGMENT_TYPE
+  npsSegments NPSSegment[]
+  country     COUNTRY      @default(UNKNOWN)
 }
 
 model Account {

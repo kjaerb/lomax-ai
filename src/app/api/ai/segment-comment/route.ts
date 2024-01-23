@@ -2,9 +2,10 @@ import { Configuration, OpenAIApi } from "openai-edge";
 import { NextRequest, NextResponse } from "next/server";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 import { systemPrompt3 } from "@/lib/constants/system-prompt";
-import { addUserResponse } from "@/data/user-response";
 import { segmentSchema } from "@/schemas/segment-schema";
 import { parseAISegmentString } from "@/lib/ai";
+import { api } from "@/trpc/server";
+import { companySchema } from "@/schemas/company-schema";
 
 const { OPEN_API_KEY } = process.env;
 
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
   try {
     const json = await req.json();
 
-    const { messages, userSegment } = json;
+    const { messages, userSegment, company } = json;
 
     const parsedUserComment = segmentSchema.parse(userSegment);
     const {
@@ -33,7 +34,6 @@ export async function POST(req: NextRequest) {
       userId,
       userComment,
       surveySendTime,
-      companyId,
       npsSource,
       country,
     } = parsedUserComment;
@@ -60,6 +60,18 @@ export async function POST(req: NextRequest) {
       onCompletion: async (data) => {
         const parsedComments = parseAISegmentString(data);
 
+        const parsedCompany = companySchema.safeParse(company);
+
+        if (parsedCompany.success) {
+          const { companyAccountName, companyAccountNumber } =
+            parsedCompany.data;
+
+          await api.company.createCompany.mutate({
+            name: companyAccountName,
+            number: companyAccountNumber,
+          });
+        }
+
         if (parsedComments === null) {
           NextResponse.json({
             error: "Error in formatting response from AI",
@@ -69,18 +81,20 @@ export async function POST(req: NextRequest) {
 
         const parsedRating = parseInt(userRating.toString(), 10);
 
-        await addUserResponse({
+        await api.npsAiSegmentation.addAISegmentation.mutate({
           data: {
             userComment,
             userId,
             userRating: parsedRating,
             surveySendTime,
-            companyId,
+            companyId: parsedCompany.success
+              ? parsedCompany.data.companyAccountNumber
+              : null,
             npsSource,
             country,
           },
-          negativeComments: parsedComments.negativeComments,
           positiveComments: parsedComments.positiveComments,
+          negativeComments: parsedComments.negativeComments,
         });
       },
     });

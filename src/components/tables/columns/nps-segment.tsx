@@ -75,7 +75,7 @@ export function NPSSegment({ comment }: NPSSegmentProps) {
             {npsSegments.map((segment) => (
               <div key={segment.id} className="border shadow-md rounded-md p-2">
                 <p>Tideligere kommentar:</p>
-                <span>{segment.npsAISegmentation.userComment}</span>
+                <span>{segment?.npsAISegmentation?.userComment}</span>
               </div>
             ))}
           </div>

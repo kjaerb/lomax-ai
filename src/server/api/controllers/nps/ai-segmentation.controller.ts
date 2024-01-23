@@ -120,7 +120,7 @@ export async function removeSegment(segmentId: number): Promise<NPSSegment> {
       },
     });
 
-    if (!segment) {
+    if (!segment || !segment.npsGroupId) {
       throw new Error("Segment not found");
     }
 
@@ -165,25 +165,39 @@ export async function addSegments({
 export async function removeSegments(
   segmentIds: number[],
   npsAISegmentationId?: number
-): Promise<NPSSegment[]> {
+) {
   return await db.$transaction(async (tx) => {
     const segments = await tx.nPSSegment.findMany({
       where: {
-        id: { in: segmentIds },
+        id: {
+          in: segmentIds,
+        },
         ...(npsAISegmentationId ? { npsAISegmentationId } : {}),
       },
-      include: { npsGroup: true },
+      include: {
+        npsGroup: true,
+      },
     });
 
     const mappedTransaction = segments.map(async (segment) => {
-      await tx.nPSGroup.update({
-        where: { id: segment.npsGroupId },
-        data: { count: { decrement: 1 } },
-      });
+      if (segment.npsGroupId) {
+        await tx.nPSGroup.update({
+          where: {
+            id: segment.npsGroupId,
+          },
+          data: {
+            count: {
+              decrement: 1,
+            },
+          },
+        });
 
-      return await tx.nPSSegment.delete({
-        where: { id: segment.id },
-      });
+        return await tx.nPSSegment.delete({
+          where: {
+            id: segment.id,
+          },
+        });
+      }
     });
 
     return Promise.all(mappedTransaction);
@@ -360,18 +374,20 @@ export async function updateSegmentationSegments({
 
       // Decrement count for removed segments
       for (const segment of segmentsToRemove) {
-        groupUpdates.push(
-          tx.nPSGroup.update({
-            where: {
-              id: segment.npsGroupId,
-            },
-            data: {
-              count: {
-                decrement: 1,
+        if (segment.npsGroupId) {
+          groupUpdates.push(
+            tx.nPSGroup.update({
+              where: {
+                id: segment.npsGroupId,
               },
-            },
-          })
-        );
+              data: {
+                count: {
+                  decrement: 1,
+                },
+              },
+            })
+          );
+        }
       }
 
       await Promise.all(groupUpdates);

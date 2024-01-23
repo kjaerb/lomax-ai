@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { UserResponse } from "@/schemas/user-comment-schema";
 import { parseAISegmentString } from "@/lib/ai";
 import { GenericDataTable } from "@/components/ui/data-table";
+import { IncludeCompanyCheckbox } from "@/components/checkboxes/include-company-checkbox";
 
 export function UserCommentTable() {
   const { userResponses } = useUserResponseStore();
@@ -59,6 +60,7 @@ export function UserCommentTable() {
           <ImportCSVDialog />
           <SegmentDialog disabled={actionsDisabled} />
           <ProgressStatusDialog disabled={actionsDisabled} />
+          <IncludeCompanyCheckbox />
         </div>
         <div>
           <ExportToCSVDialog disabled={actionsDisabled} data={dataToExport} />

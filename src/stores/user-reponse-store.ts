@@ -12,11 +12,13 @@ interface UserResponseStore {
   setProgress: (index: number, progress: Progress) => void;
   setSegmentTrigger: (
     index: number,
-    segmentTrigger: RefObject<HTMLButtonElement>,
+    segmentTrigger: RefObject<HTMLButtonElement>
   ) => void;
   setShouldSegment: (index: number, shouldSegment: boolean) => void;
   setMessages: (index: number, messages: Message[]) => void;
   setReload: (index: number, reload: () => void) => void;
+  includeCompany: boolean;
+  setIncludeCompany: (includeCompany: boolean) => void;
 }
 
 const useUserResponseStore = create<UserResponseStore>((set, get) => ({
@@ -80,6 +82,8 @@ const useUserResponseStore = create<UserResponseStore>((set, get) => ({
       }
       return { userResponses: updatedStates };
     }),
+  includeCompany: false,
+  setIncludeCompany: (includeCompany) => set({ includeCompany }),
 }));
 
 export default useUserResponseStore;

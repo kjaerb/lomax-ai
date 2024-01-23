@@ -33,6 +33,7 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
     setMessages,
     setReload,
     getProgress,
+    includeCompany,
   } = useUserResponseStore();
 
   const progress = getProgress(index);
@@ -42,11 +43,15 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
       userSegment: {
         userComment,
         userRating: parsedRating,
-        npsSource: "NPS",
+        npsSource: "NPS", //TODO
         userId: userId || "",
         companyId: null,
         surveySendTime: parseDanishDate(surveySendTime) || new Date(), // possible problem if date is not in correct format
-        country: "UNKNOWN",
+        country: "UNKNOWN", //TODO
+      },
+      company: {
+        companyAccountNumber: companyAccountNumber.toString(),
+        companyAccountName: companyName,
       },
     }
   );
