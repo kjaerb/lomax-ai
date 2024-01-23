@@ -8,19 +8,24 @@ export async function HistoryTable() {
   const history = await api.npsAiSegmentation.getAISegmentations.query();
   const count = await api.npsAiSegmentation.getAISegmentationCount.query();
 
-  const exportData: ExportSchema[] = history.map((item) => ({
-    CompanyAccountNo: item.companyAccountNumber,
-    CompanyName: item.companyAccountName,
-    Rating: item.userRating,
-    UserComment: item.userComment,
-    SurveySendTime: item.surveySendTime.toDateString(),
-    PositiveComment1: item.positiveComments[0]?.name || "",
-    PositiveComment2: item.positiveComments[1]?.name || "",
-    PositiveComment3: item.positiveComments[2]?.name || "",
-    NegativeComment1: item.negativeComments[0]?.name || "",
-    NegativeComment2: item.negativeComments[1]?.name || "",
-    NegativeComment3: item.negativeComments[2]?.name || "",
-  }));
+  const exportData: ExportSchema[] = history.map((item) => {
+    const positive = item.segments.filter((s) => s.type === "POSITIVE");
+    const negative = item.segments.filter((s) => s.type === "NEGATIVE");
+
+    return {
+      CompanyAccountNo: "",
+      CompanyName: "",
+      Rating: item.userRating,
+      UserComment: item.userComment,
+      SurveySendTime: item.surveySendTime.toDateString(),
+      PositiveComment1: positive[0]?.name || "",
+      PositiveComment2: positive[1]?.name || "",
+      PositiveComment3: positive[2]?.name || "",
+      NegativeComment1: negative[0]?.name || "",
+      NegativeComment2: negative[1]?.name || "",
+      NegativeComment3: negative[2]?.name || "",
+    };
+  });
 
   return (
     <div className="space-y-2">
@@ -34,14 +39,13 @@ export async function HistoryTable() {
         data={history}
         columns={columns}
         totalCount={count}
-        filtering="companyAccountName"
+        filtering="userComment"
         filteringLabel="Søg efter virksomhed"
         colVisibility={{
           userRating: false,
           id: false,
           userId: false,
           createdAt: false,
-          companyAccountNumber: false,
         }}
       />
     </div>

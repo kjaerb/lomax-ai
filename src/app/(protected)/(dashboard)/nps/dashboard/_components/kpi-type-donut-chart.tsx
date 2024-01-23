@@ -1,9 +1,9 @@
 import { KPIDonutChart } from "@/components/charts/kpi-dount-chart";
-import { NPSGroup, SegmentType } from "@prisma/client";
+import { NPSGroup, SEGMENT_TYPE } from "@prisma/client";
 
 interface KPITypeDonutChartProps {
   data: NPSGroup[];
-  type: SegmentType;
+  type: SEGMENT_TYPE;
   title: string;
 }
 

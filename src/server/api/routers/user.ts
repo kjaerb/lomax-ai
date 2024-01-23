@@ -1,18 +1,13 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { z } from "zod";
+import { getUserById } from "@/server/api/controllers/user.controller";
 
 export const userRouter = createTRPCRouter({
   getUserById: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
+    .query(async ({ input }) => {
       const { id } = input;
 
-      const user = await ctx.db.user.findUnique({
-        where: {
-          id,
-        },
-      });
-
-      return user;
+      return await getUserById(id);
     }),
 });

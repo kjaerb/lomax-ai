@@ -1,10 +1,10 @@
 import { db } from "@/server/db";
 import { KPITypeDonutChart } from "./kpi-type-donut-chart";
 import { KPIDonutChart } from "@/components/charts/kpi-dount-chart";
-import { SegmentType } from "@prisma/client";
+import { SEGMENT_TYPE } from "@prisma/client";
 
 type NPSGroupQuantity = {
-  type: SegmentType;
+  type: SEGMENT_TYPE;
   count: number;
 };
 
@@ -39,12 +39,12 @@ export async function DonutCharts({}: DonutChartsProps) {
       />
       <KPITypeDonutChart
         data={data}
-        type="Positive"
+        type="POSITIVE"
         title="Positive kommentarer"
       />
       <KPITypeDonutChart
         data={data}
-        type="Negative"
+        type="NEGATIVE"
         title="Negative kommentarer"
       />
     </div>

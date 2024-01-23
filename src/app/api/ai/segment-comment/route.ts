@@ -29,12 +29,13 @@ export async function POST(req: NextRequest) {
 
     const parsedUserComment = segmentSchema.parse(userSegment);
     const {
-      companyAccountNumber,
-      companyAccountName,
       userRating,
       userId,
       userComment,
       surveySendTime,
+      companyId,
+      npsSource,
+      country,
     } = parsedUserComment;
 
     if (!userId) throw "No user found";
@@ -70,12 +71,13 @@ export async function POST(req: NextRequest) {
 
         await addUserResponse({
           data: {
-            companyAccountName,
-            companyAccountNumber,
             userComment,
             userId,
             userRating: parsedRating,
             surveySendTime,
+            companyId,
+            npsSource,
+            country,
           },
           negativeComments: parsedComments.negativeComments,
           positiveComments: parsedComments.positiveComments,

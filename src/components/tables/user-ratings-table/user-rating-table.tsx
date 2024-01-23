@@ -67,7 +67,7 @@ export function UserCommentTable() {
       <GenericDataTable
         columns={columns}
         data={tableData}
-        filtering={"companyName"}
+        filtering="companyName"
         filteringLabel="Søg efter virksomhed"
         pagination={true}
         totalCount={userResponses.length}

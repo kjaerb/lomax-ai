@@ -14,19 +14,20 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { apiClient } from "@/providers/trpc-provider";
-import { NPSSegment, SegmentType } from "@prisma/client";
+import { NPSSegment as NPSSegmentType, SEGMENT_TYPE } from "@prisma/client";
 import { useState } from "react";
 
-const npsSegmentVariant: Record<keyof typeof SegmentType, string> = {
-  Negative: "text-red-500",
-  Positive: "text-emerald-500",
+const npsSegmentVariant: Record<keyof typeof SEGMENT_TYPE, string> = {
+  NEGATIVE: "text-red-500",
+  POSITIVE: "text-emerald-500",
+  NEUTRAL: "text-gray-500",
 };
 
-interface NPSCommentProps {
-  comment: NPSSegment;
+interface NPSSegmentProps {
+  comment: NPSSegmentType;
 }
 
-export function NPSComment({ comment }: NPSCommentProps) {
+export function NPSSegment({ comment }: NPSSegmentProps) {
   const [shouldFetch, setShouldFetch] = useState<boolean>(false);
 
   const { data: npsSegments } =
@@ -74,10 +75,7 @@ export function NPSComment({ comment }: NPSCommentProps) {
             {npsSegments.map((segment) => (
               <div key={segment.id} className="border shadow-md rounded-md p-2">
                 <p>Tideligere kommentar:</p>
-                <span>
-                  {segment.npsAiSegmentationNegative?.userComment ||
-                    segment.npsAiSegmentationPositive?.userComment}
-                </span>
+                <span>{segment.npsAISegmentation.userComment}</span>
               </div>
             ))}
           </div>

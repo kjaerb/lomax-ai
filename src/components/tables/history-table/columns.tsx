@@ -3,7 +3,7 @@
 import { api } from "@/trpc/server";
 import { ColumnDef } from "@tanstack/react-table";
 import { ID } from "@/components/tables/columns/id";
-import { NPSComments } from "@/components/tables/columns/nps-comments";
+import { NPSSegments } from "@/components/tables/columns/nps-segments";
 import { UserID } from "@/components/tables/columns/user-id";
 import { Date } from "@/components/tables/columns/date";
 import { HistoryActionsColumn } from "@/components/tables/history-table/columns/actions/";
@@ -60,21 +60,12 @@ export const columns: ColumnDef<UserResponseTableColumns>[] = [
     },
   },
   {
-    accessorKey: "positiveComment",
-    header: "Positive kommentarer",
+    accessorKey: "segments",
+    header: "Segmenter",
     cell: ({ row }) => {
-      const { positiveComments } = row.original;
+      const { segments } = row.original;
 
-      return <NPSComments comments={positiveComments} />;
-    },
-  },
-  {
-    accessorKey: "negativeComment",
-    header: "Negative kommentarer",
-    cell: ({ row }) => {
-      const { negativeComments } = row.original;
-
-      return <NPSComments comments={negativeComments} />;
+      return <NPSSegments comments={segments} />;
     },
   },
   {

@@ -13,7 +13,7 @@ export async function NPSGroupChart({}: NPSGroupChartProps) {
       return {
         value: group.count,
         name: group.name,
-        color: group.type === "Positive" ? "green" : "red",
+        color: group.type === "POSITIVE" ? "green" : "red",
       };
     });
 

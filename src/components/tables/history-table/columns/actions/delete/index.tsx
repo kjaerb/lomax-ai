@@ -23,15 +23,7 @@ interface DeleteProps {
 }
 
 export function Delete({ row }: DeleteProps) {
-  const {
-    companyAccountName,
-    companyAccountNumber,
-    userRating,
-    userComment,
-    surveySendTime,
-    positiveComments,
-    negativeComments,
-  } = row;
+  const { userRating, userComment, surveySendTime, segments } = row;
 
   const [isPending, startTransition] = useTransition();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -61,21 +53,13 @@ export function Delete({ row }: DeleteProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Slet segmentering fra {companyAccountName}</DialogTitle>
+          <DialogTitle>Slet segmentering</DialogTitle>
           <DialogDescription>
             Hvis denne segmentering slettes, vil den ikke længere være
             tilgængelig.
           </DialogDescription>
         </DialogHeader>
         <div>
-          <p>
-            <span className="font-bold">Virksomhedsnavn:</span>{" "}
-            {companyAccountName}
-          </p>
-          <p>
-            <span className="font-bold">Virksomhedsnummer:</span>{" "}
-            {companyAccountNumber}
-          </p>
           <p>
             <span className="font-bold">Rating:</span> {userRating}
           </p>
@@ -86,18 +70,11 @@ export function Delete({ row }: DeleteProps) {
             <span className="font-bold">Survey send time:</span>{" "}
             {surveySendTime.toLocaleString()}
           </p>
-          {positiveComments.length > 0 && (
-            <p>
-              <span className="font-bold">Positive kommentarer:</span>{" "}
-              {positiveComments.map((comment) => comment.name).join(", ")}
+          {segments?.map((segment) => (
+            <p key={segment.id}>
+              <span className="font-bold">Segment:</span> {segment.name}
             </p>
-          )}
-          {negativeComments.length > 0 && (
-            <p>
-              <span className="font-bold">Positive kommentarer:</span>{" "}
-              {negativeComments.map((comment) => comment.name).join(", ")}
-            </p>
-          )}
+          ))}
         </div>
         <DialogFooter>
           <DialogClose asChild>

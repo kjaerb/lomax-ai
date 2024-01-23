@@ -25,28 +25,25 @@ import { ArrayFields } from "@/components/forms/update-segment-form/array-fields
 import { toast } from "sonner";
 import { updateSegmentationAction } from "@/actions/ai-segmentation";
 import { usePathname } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 
 interface UpdateSegmentFormProps {
   row: UserResponseTableColumns;
 }
 
 export function UpdateSegmentForm({ row }: UpdateSegmentFormProps) {
-  const {
-    companyAccountName,
-    id,
-    userRating,
-    userComment,
-    positiveComments,
-    negativeComments,
-  } = row;
+  const { id, userRating, userComment, segments } = row;
 
-  const positiveCommentNames = positiveComments.map((comment) => {
-    return { name: comment.name as SegmentationGroups };
-  });
-  const negativeCommentNames = negativeComments.map((comment) => {
-    return { name: comment.name as SegmentationGroups };
-  });
+  const positiveCommentNames = segments
+    .filter((s) => s.type === "POSITIVE")
+    .map((comment) => {
+      return { name: comment.name as SegmentationGroups };
+    });
+  const negativeCommentNames = segments
+    .filter((s) => s.type === "NEGATIVE")
+    .map((comment) => {
+      return { name: comment.name as SegmentationGroups };
+    });
 
   const form = useForm<UpdateSegment>({
     resolver: zodResolver(updateSegmentSchema),
@@ -96,7 +93,7 @@ export function UpdateSegmentForm({ row }: UpdateSegmentFormProps) {
         <DialogHeader>
           <DialogTitle>Opdater segmentering</DialogTitle>
           <DialogDescription>
-            Her kan du opdatere segmenteringen fra {companyAccountName}
+            Her kan du opdatere segmenteringen
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

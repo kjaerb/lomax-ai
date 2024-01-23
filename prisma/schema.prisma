@@ -9,33 +9,60 @@ generator client {
   binaryTargets = ["native", "darwin-arm64"]
 }
 
-model NPSAISegmentation {
-  id                   Int          @id @default(autoincrement())
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
+enum COUNTRY {
+  DENMARK
+  SWEDEN
+  UNKNOWN
+}
+
+model Company {
+  id                   Int                 @id @default(autoincrement())
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
   companyAccountNumber String
   companyAccountName   String
-  userRating           Int
-  userComment          String
-  surveySendTime       DateTime
-  positiveComments     NPSSegment[] @relation("positiveComments")
-  negativeComments     NPSSegment[] @relation("negativeComments")
-  userId               String
-  user                 User         @relation(fields: [userId], references: [id])
+  npsAISegmentations   NPSAISegmentation[]
+  country              COUNTRY             @default(UNKNOWN)
+}
+
+enum NPS_SOURCE {
+  UNKNOWN
+  NPS
+  TRUSTPILOT
+}
+
+model NPSAISegmentation {
+  id             Int          @id @default(autoincrement())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  userRating     Int
+  userComment    String
+  surveySendTime DateTime
+  segments       NPSSegment[]
+  companyId      Int?
+  company        Company?     @relation(fields: [companyId], references: [id])
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  npsSource      NPS_SOURCE   @default(UNKNOWN)
+  country        COUNTRY      @default(UNKNOWN)
+}
+
+enum SEGMENT_TYPE {
+  POSITIVE
+  NEGATIVE
+  NEUTRAL
 }
 
 model NPSSegment {
-  id                          Int                @id @default(autoincrement())
-  createdAt                   DateTime           @default(now())
-  updatedAt                   DateTime           @updatedAt
-  name                        String
-  npsGroupId                  Int
-  npsGroup                    NPSGroup           @relation(fields: [npsGroupId], references: [id])
-  npsAiSegmentationPositiveId Int?
-  npsAiSegmentationPositive   NPSAISegmentation? @relation("positiveComments", fields: [npsAiSegmentationPositiveId], references: [id])
-  npsAiSegmentationNegativeId Int?
-  npsAiSegmentationNegative   NPSAISegmentation? @relation("negativeComments", fields: [npsAiSegmentationNegativeId], references: [id])
-  type                        SegmentType
+  id                  Int               @id @default(autoincrement())
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  name                String
+  npsGroupId          Int
+  npsGroup            NPSGroup          @relation(fields: [npsGroupId], references: [id])
+  npsAISegmentationId Int
+  npsAISegmentation   NPSAISegmentation @relation(fields: [npsAISegmentationId], references: [id])
+  type                SEGMENT_TYPE
 }
 
 model NPSGroup {
@@ -44,13 +71,9 @@ model NPSGroup {
   updatedAt  DateTime     @updatedAt
   name       String       @unique
   count      Int
-  type       SegmentType
+  type       SEGMENT_TYPE
   NPSSegment NPSSegment[]
-}
-
-enum SegmentType {
-  Positive
-  Negative
+  country    COUNTRY      @default(UNKNOWN)
 }
 
 model Account {
@@ -79,6 +102,16 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum USER_ROLE {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum APPLICATION_ACCESS {
+  NPS
+}
+
 model User {
   id             String               @id @default(cuid())
   createdAt      DateTime             @default(now())
@@ -100,13 +133,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum USER_ROLE {
-  ADMIN
-  USER
-}
-
-enum APPLICATION_ACCESS {
-  NPS
 }

@@ -42,10 +42,11 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
       userSegment: {
         userComment,
         userRating: parsedRating,
-        companyAccountName: companyName,
-        companyAccountNumber: companyAccountNumber.toString(),
+        npsSource: "NPS",
         userId: userId || "",
+        companyId: null,
         surveySendTime: parseDanishDate(surveySendTime) || new Date(), // possible problem if date is not in correct format
+        country: "UNKNOWN",
       },
     }
   );
