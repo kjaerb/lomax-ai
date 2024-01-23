@@ -1,4 +1,4 @@
-import { getCurrentRole } from "@/data/user";
+import { getCurrentRole } from "@/server/api/controllers/user.controller";
 import { USER_ROLE } from "@prisma/client";
 
 interface RoleGateProps {

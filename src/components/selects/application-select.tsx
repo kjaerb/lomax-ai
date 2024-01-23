@@ -6,9 +6,10 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { APPLICATION_ACCESS } from "@prisma/client";
 
-const applications: Record<string, string> = {
-  npsSegmenter: "NPS Segmenter",
+const applications: Record<APPLICATION_ACCESS, string> = {
+  NPS: "NPS Segmenter",
 };
 
 interface ApplicationSelectProps {}
@@ -20,7 +21,7 @@ export function ApplicationSelect({}: ApplicationSelectProps) {
       <SelectContent>
         {Object.keys(applications).map((key) => (
           <SelectItem value={key} key={key}>
-            {applications[key]}
+            {applications[key as keyof typeof applications]}
           </SelectItem>
         ))}
       </SelectContent>

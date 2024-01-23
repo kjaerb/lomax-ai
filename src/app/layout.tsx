@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/providers/trpc-provider";
 import { cookies } from "next/headers";
-import { SessionProvider } from "next-auth/react";
 import { NextAuthProvider } from "@/providers/next-auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
