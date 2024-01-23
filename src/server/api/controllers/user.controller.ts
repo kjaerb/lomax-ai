@@ -13,3 +13,13 @@ export async function getUserById(id: string) {
 
   return user;
 }
+
+export async function getAccountByUserId(userId: string) {
+  try {
+    return await db.account.findFirst({
+      where: { userId },
+    });
+  } catch {
+    return null;
+  }
+}

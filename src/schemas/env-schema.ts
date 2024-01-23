@@ -8,6 +8,7 @@ const envSchema = z.object({
   AZURE_AD_CLIENT_ID: z.string().min(1),
   AZURE_AD_CLIENT_SECRET: z.string().min(1),
   AZURE_AD_TENANT_ID: z.string().min(1),
+  NEXTAUTH_SECRET: z.string().min(1),
 });
 
 envSchema.parse(process.env);

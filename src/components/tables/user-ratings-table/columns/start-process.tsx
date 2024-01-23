@@ -33,7 +33,6 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
     setMessages,
     setReload,
     getProgress,
-    includeCompany,
   } = useUserResponseStore();
 
   const progress = getProgress(index);
@@ -81,7 +80,7 @@ export function ManualStartProcess({ row }: ManualStartProcessProps) {
     setMessages(index, messages);
   }, [messages, error, isLoading, setProgress, setMessages, index, stop]);
 
-  if (!userId) return null;
+  if (!userId) return <span>Bruger ikke fundet</span>;
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
