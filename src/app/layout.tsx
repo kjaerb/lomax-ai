@@ -4,11 +4,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { AuthProvider } from "@/providers/auth-provider";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/providers/trpc-provider";
 import { cookies } from "next/headers";
-import { ProgressBarProvider } from "@/providers/progress-bar-provider";
+import { SessionProvider } from "next-auth/react";
+import { NextAuthProvider } from "@/providers/next-auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,12 +25,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "min-h-screen bg-background")}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <AuthProvider>
+        <NextAuthProvider>
+          <TRPCReactProvider cookies={cookies().toString()}>
             <Toaster richColors />
             {children}
-          </AuthProvider>
-        </TRPCReactProvider>
+          </TRPCReactProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

@@ -3,10 +3,11 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { auth } from "@/auth";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
 
   return {
     db,

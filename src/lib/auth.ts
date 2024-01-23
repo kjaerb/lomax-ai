@@ -8,7 +8,7 @@ const { AZURE_AD_CLIENT_SECRET, AZURE_AD_CLIENT_ID, AZURE_AD_TENANT_ID } =
 
 export const authConfig = {
   pages: {
-    signIn: "/auth",
+    signIn: "/auth/login",
   },
   providers: [
     AzureADProvider({
@@ -18,5 +18,7 @@ export const authConfig = {
     }),
   ],
   adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+  },
 } satisfies NextAuthOptions;

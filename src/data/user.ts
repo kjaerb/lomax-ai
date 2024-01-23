@@ -1,5 +1,6 @@
-import { auth } from "@/auth";
+import { authConfig } from "@/lib/auth";
 import { db } from "@/server/db";
+import { getServerSession } from "next-auth";
 
 export async function getUserById(id: string) {
   try {
@@ -37,7 +38,7 @@ export async function createUser({ email, password }: CreateUserProps) {
 }
 
 export async function getCurrentRole() {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
 
   return session?.user.role;
 }
